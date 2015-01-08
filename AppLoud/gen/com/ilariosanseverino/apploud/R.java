@@ -1084,6 +1084,7 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f090024;
         public static final int activity_chooser_view_content=0x7f090025;
         public static final int always=0x7f09000f;
+        public static final int appNameLine=0x7f09003f;
         public static final int app_detail=0x7f090040;
         public static final int app_detail_container=0x7f09003c;
         public static final int app_list=0x7f09003d;
@@ -1098,7 +1099,6 @@ containing a value of this type.
         public static final int end=0x7f090017;
         public static final int expand_activities_button=0x7f090026;
         public static final int expanded_menu=0x7f09002c;
-        public static final int firstLine=0x7f09003f;
         public static final int home=0x7f090000;
         public static final int homeAsUp=0x7f09000a;
         public static final int icon=0x7f09002a;
@@ -1110,6 +1110,7 @@ containing a value of this type.
         public static final int never=0x7f090012;
         public static final int none=0x7f090019;
         public static final int normal=0x7f090007;
+        public static final int packageLine=0x7f09003e;
         public static final int progress_circular=0x7f090004;
         public static final int progress_horizontal=0x7f090005;
         public static final int radio=0x7f09002f;
@@ -1123,7 +1124,6 @@ containing a value of this type.
         public static final int search_plate=0x7f090036;
         public static final int search_src_text=0x7f090037;
         public static final int search_voice_btn=0x7f09003b;
-        public static final int secondLine=0x7f09003e;
         public static final int shortcut=0x7f09002e;
         public static final int showCustom=0x7f09000b;
         public static final int showHome=0x7f09000c;

@@ -246,6 +246,7 @@ int id action_menu_presenter 0x7f090003
 int id action_mode_close_button 0x7f090024
 int id activity_chooser_view_content 0x7f090025
 int id always 0x7f09000f
+int id appNameLine 0x7f09003f
 int id app_detail 0x7f090040
 int id app_detail_container 0x7f09003c
 int id app_list 0x7f09003d
@@ -260,7 +261,6 @@ int id edit_query 0x7f090030
 int id end 0x7f090017
 int id expand_activities_button 0x7f090026
 int id expanded_menu 0x7f09002c
-int id firstLine 0x7f09003f
 int id home 0x7f090000
 int id homeAsUp 0x7f09000a
 int id icon 0x7f09002a
@@ -272,6 +272,7 @@ int id middle 0x7f090018
 int id never 0x7f090012
 int id none 0x7f090019
 int id normal 0x7f090007
+int id packageLine 0x7f09003e
 int id progress_circular 0x7f090004
 int id progress_horizontal 0x7f090005
 int id radio 0x7f09002f
@@ -285,7 +286,6 @@ int id search_mag_icon 0x7f090035
 int id search_plate 0x7f090036
 int id search_src_text 0x7f090037
 int id search_voice_btn 0x7f09003b
-int id secondLine 0x7f09003e
 int id shortcut 0x7f09002e
 int id showCustom 0x7f09000b
 int id showHome 0x7f09000c

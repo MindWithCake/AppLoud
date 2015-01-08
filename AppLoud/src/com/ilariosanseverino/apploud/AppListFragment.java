@@ -6,9 +6,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ilariosanseverino.apploud.UI.AppListAdapter;
 import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.dummy.DummyContent;
 
@@ -79,9 +79,7 @@ public class AppListFragment extends ListFragment {
 		if (savedInstanceState != null && savedInstanceState.containsKey(AppListActivity.LIST_ARG))
 			appList = savedInstanceState.getParcelableArrayList(AppListActivity.LIST_ARG);          
 		
-		setListAdapter(new ArrayAdapter<AppListItem>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, appList));
+		setListAdapter(new AppListAdapter(getActivity(), appList));
 	}
 
 	@Override

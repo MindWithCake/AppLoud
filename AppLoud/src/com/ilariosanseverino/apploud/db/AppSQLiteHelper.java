@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.AudioManager;
+import android.util.Log;
 import android.util.Pair;
 
 import com.ilariosanseverino.apploud.UI.AppListItem;
@@ -30,7 +31,7 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 			new ArrayList<Pair<Integer, String>>(4);
 	
 	public static final String DATABASE_NAME = "AppVolList.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
 
 	public AppSQLiteHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -19,7 +19,7 @@ public class AppListItem implements Parcelable {
 	};
 
 	public AppListItem(String name, String pkg){
-		this(pkg+"."+name);
+		this(pkg+" "+name);
 	}
 	
 	private AppListItem(Parcel parcel){
@@ -27,9 +27,9 @@ public class AppListItem implements Parcelable {
 	}
 	
 	public AppListItem(String qualifiedName){
-		int dot = qualifiedName.lastIndexOf('.');
-		appPkg = qualifiedName.substring(0, dot);
-		appName = qualifiedName.substring(dot+1);
+		int separator = qualifiedName.indexOf(' ');
+		appPkg = qualifiedName.substring(0, separator);
+		appName = qualifiedName.substring(separator+1);
 	}
 
 	public String getAppName(){

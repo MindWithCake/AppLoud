@@ -74,7 +74,7 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 	        	detFrag = new AppDetailFragment();
 	            Bundle args = new Bundle();
 	            args.putParcelable(ITEM_ARG, new AppListItem(
-	            		"com.ilariosanseverino.apploud.AppLoud"));
+	            		"com.ilariosanseverino.apploud AppLoud"));
 	            detFrag.setArguments(args);
 	            fragmentManager.beginTransaction().replace(R.id.app_detail_container,
 	            		detFrag, DETAIL_FRAG_TAG).commit();

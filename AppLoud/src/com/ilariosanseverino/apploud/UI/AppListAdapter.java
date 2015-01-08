@@ -3,7 +3,11 @@ package com.ilariosanseverino.apploud.UI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,39 +15,60 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ilariosanseverino.apploud.R;
+
 public class AppListAdapter extends ArrayAdapter<AppListItem> {
 	
-	private Context context;
+	private LayoutInflater inflater;
+	private PackageManager pm;
 
-	public AppListAdapter(Context context, int resource){
-		this(context, resource, new ArrayList<AppListItem>());
+	public AppListAdapter(Context context){
+		this(context, new ArrayList<AppListItem>());
 	}
 
-	public AppListAdapter(Context context, int resource, AppListItem[] objects){
-		this(context, resource, new ArrayList<AppListItem>(Arrays.asList(objects)));
+	public AppListAdapter(Context context, AppListItem[] objects){
+		this(context, new ArrayList<AppListItem>(Arrays.asList(objects)));
 	}
 
-	public AppListAdapter(Context context, int resource, List<AppListItem> objects){
-		super(context, resource, objects);
-		this.context = context;
+	public AppListAdapter(Context context, List<AppListItem> objects){
+		super(context, R.layout.app_list_element, objects);
+		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		pm = context.getPackageManager();
 	}
 	
-//	@Override
-//	public View getView(int position, View convertView, ViewGroup parent) {
-//		LayoutInflater inflater = (LayoutInflater) context
-//				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
-//		TextView textView = (TextView) rowView.findViewById(R.id.label);
-//		ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-//		textView.setText(values[position]);
-//		// change the icon for Windows and iPhone
-//		String s = values[position];
-//		if (s.startsWith("iPhone")) {
-//			imageView.setImageResource(R.drawable.no);
-//		} else {
-//			imageView.setImageResource(R.drawable.ok);
-//		}
-//
-//		return rowView;
-//	}
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		AppRowViewHolder holder;
+		
+		if(convertView == null){
+			convertView = inflater.inflate(R.layout.app_list_element, parent, false);
+			holder = new AppRowViewHolder();
+			holder.appText = (TextView) convertView.findViewById(R.id.appNameLine);
+			holder.packageText = (TextView) convertView.findViewById(R.id.packageLine);
+			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+			convertView.setTag(holder);
+		}
+		else
+			holder = (AppRowViewHolder)convertView.getTag();
+
+		AppListItem item = getItem(position);
+		
+		holder.appText.setText(item.getAppName());
+		holder.packageText.setText(item.getAppPkg());
+		try{
+			holder.icon.setImageDrawable(pm.getApplicationIcon(item.getAppPkg()));
+		}
+		catch(NameNotFoundException e){
+			Log.d("Adapter", "package non trovato: "+item.getAppPkg());
+			holder.icon.setImageDrawable(null);
+		}
+		
+		return convertView;
+	}
+	
+	static class AppRowViewHolder {
+		TextView appText;
+		TextView packageText;
+		ImageView icon;
+	}
 }
