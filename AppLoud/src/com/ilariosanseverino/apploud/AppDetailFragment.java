@@ -17,12 +17,6 @@ import com.ilariosanseverino.apploud.UI.AppListItem;
 public class AppDetailFragment extends Fragment {
 	
 	private AppListItem item;
-	
-	/**
-	 * The fragment argument representing the item ID that this fragment
-	 * represents.
-	 */
-	public static final String ARG_ITEM_ID = "item_id";
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the

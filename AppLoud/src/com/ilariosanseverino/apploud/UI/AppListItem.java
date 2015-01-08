@@ -49,7 +49,7 @@ public class AppListItem implements Parcelable {
 	}
 	
 	public String toString(){
-		return /*appPkg+"."+*/appName;
+		return appPkg+"."+appName;
 	}
 
 	@Override
@@ -59,6 +59,6 @@ public class AppListItem implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags){
-		dest.writeString(appPkg+"."+appName);
+		dest.writeString(appPkg+" "+appName);
 	}
 }

@@ -96,10 +96,10 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 	 * the item with the given ID was selected.
 	 */
 	@Override
-	public void onItemSelected(String id){
+	public void onItemSelected(long id){
 		if(mTwoPane){
 			Bundle arguments = new Bundle();
-			arguments.putString(AppDetailFragment.ARG_ITEM_ID, id);
+			arguments.putParcelable(ITEM_ARG, dataModel.getAppList().get((int)id));
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().replace(
@@ -107,7 +107,8 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 		}
 		else{
 			Intent detailIntent = new Intent(this, AppDetailActivity.class);
-			detailIntent.putExtra(AppDetailFragment.ARG_ITEM_ID, id);
+			AppListItem item = dataModel.getAppList().get((int)id);
+			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
 		}
 	}

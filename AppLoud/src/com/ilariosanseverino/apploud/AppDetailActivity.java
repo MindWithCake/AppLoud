@@ -2,9 +2,11 @@ package com.ilariosanseverino.apploud;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+
+import com.ilariosanseverino.apploud.UI.AppListItem;
 
 /**
  * An activity representing a single App detail screen. This activity is only
@@ -37,8 +39,8 @@ public class AppDetailActivity extends ActionBarActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putParcelable(AppListActivity.LIST_ARG,
-					getIntent().getParcelableExtra(AppListActivity.LIST_ARG));
+			AppListItem item = getIntent().getParcelableExtra(AppListActivity.ITEM_ARG);
+			arguments.putParcelable(AppListActivity.ITEM_ARG, item);
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(
