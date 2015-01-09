@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Stringhe in ITALIANO -->
+
 <resources>
-
-    <string name="app_name">AppLoud</string>
-    <string name="title_app_detail">App Detail</string>
-
+	<string name="title_app_detail">Dettagli App</string>
+	<string name="ring_icon_descr">Suoneria</string>
+	<string name="media_icon_descr">Multimedia</string>
+	<string name="notify_icon_descr">Notifiche</string>
+	<string name="sys_icon_descr">Sistema</string>
+	<string name="detail_frag_role">Imposta il volume desiderato, oppure disabilita \
+		per mantenere inalterato</string>
+	<string name="toggle_button">Ignora</string>
 </resources>

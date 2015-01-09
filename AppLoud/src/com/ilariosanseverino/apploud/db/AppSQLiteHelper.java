@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.AudioManager;
-import android.util.Log;
 import android.util.Pair;
 
 import com.ilariosanseverino.apploud.UI.AppListItem;

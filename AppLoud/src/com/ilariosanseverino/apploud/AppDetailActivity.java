@@ -43,7 +43,7 @@ public class AppDetailActivity extends ActionBarActivity {
 			arguments.putParcelable(AppListActivity.ITEM_ARG, item);
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(
+			getSupportFragmentManager().beginTransaction().replace(
 					R.id.app_detail_container, fragment).commit();
 		}
 	}
