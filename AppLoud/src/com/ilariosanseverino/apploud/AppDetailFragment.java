@@ -41,7 +41,7 @@ public class AppDetailFragment extends Fragment {
 				container, false);
 
 		((TextView)rootView.findViewById(R.id.app_detail)).setText(
-				item != null? item.getAppName() : "No details available");
+				item != null? item.appName() : "No details available");
 
 		return rootView;
 	}

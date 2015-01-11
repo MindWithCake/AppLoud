@@ -1,16 +1,14 @@
 package com.ilariosanseverino.apploud;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.ilariosanseverino.apploud.UI.AppListDataModel;
 import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
@@ -30,12 +28,49 @@ import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
  * interface to listen for item selections.
  */
 public class AppListActivity extends FragmentActivity implements AppListFragment.Callbacks {
-
 	private boolean mTwoPane; //Whether or not the activity is in two-pane mode
-	
 	private Intent serviceIntent;
 	private AppListDataModel dataModel;
-	private final ServiceConnection connection = new AppServiceConnection();
+	private IBackgroundServiceBinder binder;
+	private final BackgroundConnection connection = new BackgroundConnection(){
+		@Override
+		public void doOnServiceConnected(){
+			Log.i("ListActivity", "servizio della lista connesso");
+			dataModel = new AppListDataModel(binder);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			setContentView(R.layout.activity_app_list);
+
+			if(findViewById(R.id.app_detail_container) != null){
+				mTwoPane = true;
+				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).setActivateOnItemClick(true);
+
+				AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.findFragmentByTag(DETAIL_FRAG_TAG);
+				if (detFrag == null) {
+					detFrag = new AppDetailFragment();
+					Bundle args = new Bundle();
+					args.putParcelable(ITEM_ARG, new AppListItem("com.ilariosanseverino.apploud AppLoud"));
+					detFrag.setArguments(args);
+					fragmentManager.beginTransaction().replace(R.id.app_detail_container,
+							detFrag, DETAIL_FRAG_TAG).commit();
+				}
+			}
+
+			AppListFragment listFrag = (AppListFragment)fragmentManager.findFragmentByTag(LIST_FRAG_TAG);
+			if(listFrag == null){
+				listFrag = new AppListFragment();
+				Bundle arguments = new Bundle();
+				arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
+				listFrag.setArguments(arguments);
+				fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
+			}
+			unbindService(connection);
+		}
+
+		@Override
+		public void setBinder(IBackgroundServiceBinder binder){
+			AppListActivity.this.binder = binder;
+		}
+	};
 	
 	public final static String DETAIL_FRAG_TAG = "Detail";
 	public final static String LIST_FRAG_TAG = "List";
@@ -51,46 +86,6 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT|BIND_AUTO_CREATE);
 	}
 	
-	private void doOnServiceConnected(IBackgroundServiceBinder binder){
-		dataModel = new AppListDataModel(binder);
-		unbindService(connection);
-		
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		
-		setContentView(R.layout.activity_app_list);
-		
-		if(findViewById(R.id.app_detail_container) != null){
-			// The detail container view will be present only in the
-			// large-screen layouts (res/values-large and
-			// res/values-sw600dp).
-			mTwoPane = true;
-			
-			((AppListFragment) getSupportFragmentManager().findFragmentById(
-					R.id.app_list)).setActivateOnItemClick(true);
-			
-			AppDetailFragment detFrag = (AppDetailFragment)
-					fragmentManager.findFragmentByTag(DETAIL_FRAG_TAG);
-	        if (detFrag == null) {
-	        	detFrag = new AppDetailFragment();
-	            Bundle args = new Bundle();
-	            args.putParcelable(ITEM_ARG, new AppListItem(
-	            		"com.ilariosanseverino.apploud AppLoud"));
-	            detFrag.setArguments(args);
-	            fragmentManager.beginTransaction().replace(R.id.app_detail_container,
-	            		detFrag, DETAIL_FRAG_TAG).commit();
-	        }
-		}
-		
-		AppListFragment listFrag = (AppListFragment)fragmentManager.findFragmentByTag(LIST_FRAG_TAG);
-		if(listFrag == null){
-			listFrag = new AppListFragment();
-	           Bundle arguments = new Bundle();
-	           arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
-	           listFrag.setArguments(arguments);
-	           fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
-		}
-	}
-
 	/**
 	 * Callback method from {@link AppListFragment.Callbacks} indicating that
 	 * the item with the given ID was selected.
@@ -110,19 +105,6 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 			AppListItem item = dataModel.getAppList().get((int)id);
 			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
-		}
-	}
-	
-	private class AppServiceConnection implements ServiceConnection{
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service){
-			Log.d("Connection", "Servizio connesso");
-			doOnServiceConnected((IBackgroundServiceBinder)service);
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name){
-			Log.d("Connection", "Servizio interrotto");
 		}
 	}
 }

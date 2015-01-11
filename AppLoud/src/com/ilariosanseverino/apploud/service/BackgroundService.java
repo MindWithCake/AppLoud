@@ -69,7 +69,17 @@ public class BackgroundService extends Service {
 
 		@Override
 		public ArrayList<AppListItem> getAppList(){
-			return AppSQLiteHelper.toAppList(db);
+			return helper.toAppList(db);
+		}
+
+		@Override
+		public void updateStream(AppListItem item, String streamName, int newValue){
+			helper.updateVolume(db, item.appName(), item.appPkg(), streamName, newValue);
+		}
+
+		@Override
+		public void setStreamEnabled(AppListItem item, String stream, boolean enabled){
+			helper.setStreamEnabled(db, item.appName(), item.appPkg(), stream, enabled);
 		}
 	}
 }

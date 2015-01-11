@@ -1,12 +1,23 @@
 package com.ilariosanseverino.apploud;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.service.BackgroundConnection;
+import com.ilariosanseverino.apploud.service.BackgroundService;
+import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
 /**
  * An activity representing a single App detail screen. This activity is only
@@ -16,52 +27,102 @@ import com.ilariosanseverino.apploud.UI.AppListItem;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link AppDetailFragment}.
  */
-public class AppDetailActivity extends ActionBarActivity {
+public class AppDetailActivity extends ActionBarActivity implements OnClickListener, OnSeekBarChangeListener {
+	private Intent serviceIntent;
+	private AudioManager audioManager;
+	private AppListItem item;
+	private IBackgroundServiceBinder binder;
+	private BackgroundConnection connection = new BackgroundConnection(){
+		@Override
+		public void doOnServiceConnected(){
+			Log.i("DetailActivity", "connessione avvenuta");
+		}
+
+		@Override
+		public void setBinder(IBackgroundServiceBinder binder){
+			AppDetailActivity.this.binder = binder;
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		serviceIntent = new Intent(this, BackgroundService.class);
+		bindService(serviceIntent, connection, BIND_AUTO_CREATE);
 		setContentView(R.layout.activity_app_detail);
-
+		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+		
 		// Show the Up button in the action bar.
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// savedInstanceState is non-null when there is fragment state
-		// saved from previous configurations of this activity
-		// (e.g. when rotating the screen from portrait to landscape).
-		// In this case, the fragment will automatically be re-added
-		// to its container so we don't need to manually add it.
 		// For more information, see the Fragments API guide at:
-		//
 		// http://developer.android.com/guide/components/fragments.html
-		//
 		if(savedInstanceState == null){
-			// Create the detail fragment and add it to the activity
-			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			AppListItem item = getIntent().getParcelableExtra(AppListActivity.ITEM_ARG);
+			item = getIntent().getParcelableExtra(AppListActivity.ITEM_ARG);
 			arguments.putParcelable(AppListActivity.ITEM_ARG, item);
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().replace(
 					R.id.app_detail_container, fragment).commit();
 		}
+		
+		for(AudioSource src: AudioSource.values()){
+			findViewById(src.checkId()).setOnClickListener(this);
+			SeekBar seekBar = (SeekBar)findViewById(src.seekId());
+			seekBar.setOnSeekBarChangeListener(this);
+			seekBar.setMax(audioManager.getStreamMaxVolume(src.audioStream()));
+		}
+	}
+	
+	@Override
+	protected void onDestroy(){
+		if(connection != null)
+			unbindService(connection);
+		super.onDestroy();
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		int id = item.getItemId();
+	public boolean onOptionsItemSelected(MenuItem menuItem){
+		int id = menuItem.getItemId();
 		if(id == android.R.id.home){
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
+			// For more details, see the Navigation pattern on Android Design:
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpTo(this, new Intent(this, AppListActivity.class));
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(menuItem);
 	}
+	
+	@Override
+	public void onClick(View v){
+		Log.i("ClickListener", "box checkata");
+		if(binder == null)
+			return;
+		Log.i("ClickListener", "binder non è null");
+		boolean shouldEnable = !((CheckBox)v).isChecked();
+		for(AudioSource src: AudioSource.values()){
+			if(v.getId() == src.checkId()){
+				findViewById(src.seekId()).setEnabled(shouldEnable);
+				binder.setStreamEnabled(item, src.columnName(), shouldEnable);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser){
+		if(binder == null)
+			return;
+		Log.i("ProgressListener", "Progress Bar modificata");
+		for(AudioSource src: AudioSource.values()){
+			if(src.seekId() == seekBar.getId()){
+				binder.updateStream(item, src.columnName(), progress);
+				return;
+			}
+		}
+	}
+
+	@Override public void onStartTrackingTouch(SeekBar seekBar){}
+	@Override public void onStopTrackingTouch(SeekBar seekBar){}
 }

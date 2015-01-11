@@ -53,13 +53,13 @@ public class AppListAdapter extends ArrayAdapter<AppListItem> {
 
 		AppListItem item = getItem(position);
 		
-		holder.appText.setText(item.getAppName());
-		holder.packageText.setText(item.getAppPkg());
+		holder.appText.setText(item.appName());
+		holder.packageText.setText(item.appPkg());
 		try{
-			holder.icon.setImageDrawable(pm.getApplicationIcon(item.getAppPkg()));
+			holder.icon.setImageDrawable(pm.getApplicationIcon(item.appPkg()));
 		}
 		catch(NameNotFoundException e){
-			Log.d("Adapter", "package non trovato: "+item.getAppPkg());
+			Log.d("Adapter", "package non trovato: "+item.appPkg());
 			holder.icon.setImageDrawable(null);
 		}
 		

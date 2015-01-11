@@ -96,21 +96,16 @@ public class AppListFragment extends ListFragment {
 	@Override
 	public void onAttach(Activity activity){
 		super.onAttach(activity);
-
-		// Activities containing this fragment must implement its callbacks.
-		if(!(activity instanceof Callbacks)){
+		
+		if(!(activity instanceof Callbacks))
 			throw new IllegalStateException(
 					"Activity must implement fragment's callbacks.");
-		}
-
 		mCallbacks = (Callbacks) activity;
 	}
 
 	@Override
 	public void onDetach(){
 		super.onDetach();
-
-		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
 	}
 
@@ -127,10 +122,8 @@ public class AppListFragment extends ListFragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState){
 		super.onSaveInstanceState(outState);
-		if(mActivatedPosition != ListView.INVALID_POSITION){
-			// Serialize and persist the activated item position.
+		if(mActivatedPosition != ListView.INVALID_POSITION)
 			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-		}
 	}
 
 	/**
@@ -140,18 +133,15 @@ public class AppListFragment extends ListFragment {
 	public void setActivateOnItemClick(boolean activateOnItemClick){
 		// When setting CHOICE_MODE_SINGLE, ListView will automatically
 		// give items the 'activated' state when touched.
-		getListView().setChoiceMode(
-				activateOnItemClick? ListView.CHOICE_MODE_SINGLE
-						: ListView.CHOICE_MODE_NONE);
+		getListView().setChoiceMode(activateOnItemClick?
+				ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
 	private void setActivatedPosition(int position){
-		if(position == ListView.INVALID_POSITION){
+		if(position == ListView.INVALID_POSITION)
 			getListView().setItemChecked(mActivatedPosition, false);
-		}
-		else{
+		else
 			getListView().setItemChecked(position, true);
-		}
 
 		mActivatedPosition = position;
 	}

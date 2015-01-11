@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class AppListItem implements Parcelable {
-	private String appName;
-	private String appPkg;
+	private final String appname;
+	private final String apppkg;
 	
 	public static final Parcelable.Creator<AppListItem> CREATOR = 
 			new Parcelable.Creator<AppListItem>() {
@@ -28,28 +28,20 @@ public class AppListItem implements Parcelable {
 	
 	public AppListItem(String qualifiedName){
 		int separator = qualifiedName.indexOf(' ');
-		appPkg = qualifiedName.substring(0, separator);
-		appName = qualifiedName.substring(separator+1);
+		apppkg = qualifiedName.substring(0, separator);
+		appname = qualifiedName.substring(separator+1);
 	}
 
-	public String getAppName(){
-		return appName;
-	}
-
-	public void setAppName(String appName){
-		this.appName = appName;
+	public String appName(){
+		return appname;
 	}
 	
-	public String getAppPkg(){
-		return appPkg;
-	}
-
-	public void setAppPkg(String appPkg){
-		this.appPkg = appPkg;
+	public String appPkg(){
+		return apppkg;
 	}
 	
 	public String toString(){
-		return appPkg+"."+appName;
+		return apppkg+"."+appname;
 	}
 
 	@Override
@@ -59,6 +51,6 @@ public class AppListItem implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags){
-		dest.writeString(appPkg+" "+appName);
+		dest.writeString(apppkg+" "+appname);
 	}
 }

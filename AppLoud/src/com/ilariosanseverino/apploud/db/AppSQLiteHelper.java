@@ -7,9 +7,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.media.AudioManager;
-import android.util.Pair;
+import android.util.Log;
 
+import com.ilariosanseverino.apploud.AudioSource;
 import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry;
 
@@ -26,22 +26,11 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 		AppEntry.COLUMN_NAME_SYSTEM_STREAM+AppEntry.COLUMN_TYPE_RING_STREAM+","+
 		" UNIQUE("+AppEntry.COLUMN_NAME_APPNAME+", "+AppEntry.COLUMN_NAME_PACKAGE+"))";
 	
-	private final ArrayList<Pair<Integer, String>> streams = 
-			new ArrayList<Pair<Integer, String>>(4);
-	
 	public static final String DATABASE_NAME = "AppVolList.db";
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
 
 	public AppSQLiteHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		streams.add(new Pair<Integer, String>(
-				AudioManager.STREAM_MUSIC, AppEntry.COLUMN_NAME_MUSIC_STREAM));
-		streams.add(new Pair<Integer, String>(
-				AudioManager.STREAM_NOTIFICATION, AppEntry.COLUMN_NAME_NOTIFICATION_STREAM));
-		streams.add(new Pair<Integer, String>(
-				AudioManager.STREAM_RING, AppEntry.COLUMN_NAME_RING_STREAM));
-		streams.add(new Pair<Integer, String>(
-				AudioManager.STREAM_SYSTEM, AppEntry.COLUMN_NAME_SYSTEM_STREAM));
 	}
 
 	@Override
@@ -55,7 +44,7 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public static ArrayList<AppListItem> toAppList(SQLiteDatabase db){
+	public ArrayList<AppListItem> toAppList(SQLiteDatabase db){
 		final String[] cols = {
 				AppEntry.COLUMN_NAME_APPNAME,
 				AppEntry.COLUMN_NAME_PACKAGE};
@@ -73,6 +62,32 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 		ContentValues cv = new ContentValues();
 		cv.put(AppEntry.COLUMN_NAME_APPNAME, appName);
 		cv.put(AppEntry.COLUMN_NAME_PACKAGE, pkgName);
+		for(AudioSource src: AudioSource.values())
+			cv.put(src.columnName(), 0);
 		db.insertWithOnConflict(AppEntry.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
+	}
+	
+	public void updateVolume(SQLiteDatabase db, String appName, String appPkg, String stream, Integer volume){
+		ContentValues cv = new ContentValues();
+		String clause = AppEntry.COLUMN_NAME_APPNAME+"=? AND "+AppEntry.COLUMN_NAME_PACKAGE+"=?";
+		cv.put(stream, volume);
+		int cols = db.update(AppEntry.TABLE_NAME, cv, clause, new String[]{appName, appPkg});
+		Log.d("Helper", "aggiornate "+cols+" righe");
+	}
+	
+	public void setStreamEnabled(SQLiteDatabase db, String appName, String appPkg, String stream, boolean enabled){
+		String selection = AppEntry.COLUMN_NAME_APPNAME+"=? AND "+
+				AppEntry.COLUMN_NAME_PACKAGE+"=?";
+		String[] selectionArgs = {appName, appPkg};
+		Cursor cursor = db.query(AppEntry.TABLE_NAME, new String[]{stream}, selection,
+				selectionArgs, null, null, null, null);
+		if(!cursor.moveToFirst())
+			return; //TODO forse dovrei segnalare l'errore
+		Integer valueToStore = cursor.getInt(0);
+		if(enabled)
+			valueToStore = cursor.isNull(0)? 0 : Math.abs(valueToStore);
+		else
+			valueToStore = valueToStore == 0? null : -Math.abs(valueToStore);
+		updateVolume(db, appName, appPkg, stream, valueToStore);
 	}
 }
