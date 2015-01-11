@@ -35,6 +35,21 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 	private BackgroundConnection connection = new BackgroundConnection(){
 		@Override
 		public void doOnServiceConnected(){
+			AppDetailActivity act = AppDetailActivity.this;
+			Integer[] volumes = binder.getStreamValues(item);
+			AudioSource[] src = AudioSource.values();
+			for(int i = 0; i < volumes.length; ++i){
+				CheckBox box = (CheckBox)act.findViewById(src[i].checkId());
+				if(volumes[i] == null || volumes[i].intValue() < 0){
+					box.setChecked(true);
+					box.invalidate();
+					volumes[i] = volumes[i] == null? 0 : -volumes[i];
+				}
+				SeekBar bar = (SeekBar)act.findViewById(src[i].seekId());
+				bar.setProgress(volumes[i]);
+				bar.setEnabled(!box.isChecked());
+				bar.invalidate();
+			}
 			Log.i("DetailActivity", "connessione avvenuta");
 		}
 
@@ -112,7 +127,7 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser){
-		if(binder == null)
+		if(binder == null || !fromUser)
 			return;
 		Log.i("ProgressListener", "Progress Bar modificata");
 		for(AudioSource src: AudioSource.values()){

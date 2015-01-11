@@ -81,5 +81,10 @@ public class BackgroundService extends Service {
 		public void setStreamEnabled(AppListItem item, String stream, boolean enabled){
 			helper.setStreamEnabled(db, item.appName(), item.appPkg(), stream, enabled);
 		}
+
+		@Override
+		public Integer[] getStreamValues(AppListItem item){
+			return helper.getStreams(db, item.appName(), item.appPkg());
+		}
 	}
 }

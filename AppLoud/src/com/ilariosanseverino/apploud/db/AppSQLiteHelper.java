@@ -28,6 +28,8 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 	
 	public static final String DATABASE_NAME = "AppVolList.db";
     public static final int DATABASE_VERSION = 5;
+    public final int STREAMS_NUMBER = AudioSource.values().length;
+    private final String SELECT_APP =  AppEntry.COLUMN_NAME_APPNAME+"=? AND "+AppEntry.COLUMN_NAME_PACKAGE+"=?";
 
 	public AppSQLiteHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,18 +70,19 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public void updateVolume(SQLiteDatabase db, String appName, String appPkg, String stream, Integer volume){
+		Log.i("Helper", "Aggiornato volume");
 		ContentValues cv = new ContentValues();
-		String clause = AppEntry.COLUMN_NAME_APPNAME+"=? AND "+AppEntry.COLUMN_NAME_PACKAGE+"=?";
-		cv.put(stream, volume);
-		int cols = db.update(AppEntry.TABLE_NAME, cv, clause, new String[]{appName, appPkg});
+		if(volume != null)
+			cv.put(stream, volume);
+		else
+			cv.putNull(stream);
+		int cols = db.update(AppEntry.TABLE_NAME, cv, SELECT_APP, new String[]{appName, appPkg});
 		Log.d("Helper", "aggiornate "+cols+" righe");
 	}
 	
 	public void setStreamEnabled(SQLiteDatabase db, String appName, String appPkg, String stream, boolean enabled){
-		String selection = AppEntry.COLUMN_NAME_APPNAME+"=? AND "+
-				AppEntry.COLUMN_NAME_PACKAGE+"=?";
 		String[] selectionArgs = {appName, appPkg};
-		Cursor cursor = db.query(AppEntry.TABLE_NAME, new String[]{stream}, selection,
+		Cursor cursor = db.query(AppEntry.TABLE_NAME, new String[]{stream}, SELECT_APP,
 				selectionArgs, null, null, null, null);
 		if(!cursor.moveToFirst())
 			return; //TODO forse dovrei segnalare l'errore
@@ -88,6 +91,21 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 			valueToStore = cursor.isNull(0)? 0 : Math.abs(valueToStore);
 		else
 			valueToStore = valueToStore == 0? null : -Math.abs(valueToStore);
+		Log.i("Helper", "StreamEnabled aggiornerà volume: "+valueToStore);
 		updateVolume(db, appName, appPkg, stream, valueToStore);
+	}
+	
+	public Integer[] getStreams(SQLiteDatabase db, String name, String pkg){
+		Integer[] ret = new Integer[STREAMS_NUMBER];
+		String[] cols = new String[STREAMS_NUMBER];
+		for(AudioSource src: AudioSource.values())
+			cols[src.ordinal()] = src.columnName();
+		Cursor cursor = db.query(AppEntry.TABLE_NAME, cols, SELECT_APP,
+				new String[]{name, pkg}, null, null, null, null);
+		if(cursor.moveToFirst()){
+			for(int i = 0; i < STREAMS_NUMBER; ++i)
+				ret[i] = cursor.isNull(i)? null : cursor.getInt(i);
+		}
+		return ret;
 	}
 }
