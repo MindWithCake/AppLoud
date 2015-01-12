@@ -42,29 +42,21 @@ public class BackgroundService extends Service {
 	
 	@Override
 	public int onStartCommand (Intent intent, int flags, int startId){
-		Log.d("Bg", "Chiamato start command");
 		(thread = new BackgroundThread(this)).start();
-		Log.d("Bg", "Thread avviato da startCommand");
 		return START_STICKY;
 	}
 
 	@Override
 	public IBinder onBind(Intent intent){
-		Log.d("Bg", "onBind chiamata");
 		if(thread == null)
 			return null;
 		return binder;
 	}
 	
-	private void quit(){
-		Log.d("Bg", "Richiesta di quittaggio");
-		stopSelf();
-	}
-	
 	public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 		@Override
 		public void quitService(){
-			BackgroundService.this.quit();
+			BackgroundService.this.stopSelf();
 		}
 
 		@Override

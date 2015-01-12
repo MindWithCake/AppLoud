@@ -31,6 +31,14 @@
 			android:text="@string/detail_frag_role" />
 		
 	</RelativeLayout>
+	
+	<FrameLayout
+		android:id="@+id/title_separator"
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:layout_marginLeft="30dp"
+		android:layout_marginRight="30dp"
+		android:background="@color/light_gray" />
 
 	<RelativeLayout
 		android:id="@+id/first_row"

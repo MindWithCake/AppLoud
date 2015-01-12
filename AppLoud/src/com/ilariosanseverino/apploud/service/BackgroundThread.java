@@ -3,18 +3,25 @@ package com.ilariosanseverino.apploud.service;
 import java.util.List;
 
 import android.app.ActivityManager.RunningTaskInfo;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.media.AudioManager;
+
+import com.ilariosanseverino.apploud.AudioSource;
 
 public class BackgroundThread extends Thread {
 	private long checkFrequency = 5000;
 	private BackgroundService owner;
 	private String lastPackage, lastApp, currentPackage, currentApp;
+	private AudioManager audioManager;
+	private Integer[] originalValues = new Integer[AudioSource.values().length];
 	
 	public BackgroundThread(BackgroundService owner){
 		this.owner = owner;
 		lastPackage = currentPackage = owner.getApplication().getPackageName();
 		lastApp = currentApp = getAppName(currentPackage);
+		audioManager = (AudioManager)owner.getSystemService(Context.AUDIO_SERVICE);
 	}
 	
 	@Override
@@ -38,12 +45,27 @@ public class BackgroundThread extends Thread {
 		RunningTaskInfo taskInfo = owner.activityManager.getRunningTasks(1).get(0);
 		currentPackage = taskInfo.topActivity.getPackageName();
 		currentApp = getAppName(currentPackage);
-		if(!currentApp.equals(lastApp) || !currentPackage.equals(lastPackage))
+		if(!currentApp.equals(lastApp) || !currentPackage.equals(lastPackage)){
+			lastApp = currentApp;
+			lastPackage = currentPackage;
 			onAppChanged();
+		}
 	}
 	
 	private void onAppChanged(){
-		//TODO
+		Integer[] vols = owner.helper.getStreams(owner.db, currentApp, currentPackage);
+		for(int i = 0; i < vols.length; ++i){
+			AudioSource src = AudioSource.values()[i];
+			if(vols[i] != null && vols[i].intValue() >= 0){
+				if(originalValues[i] == null)
+					originalValues[i] = audioManager.getStreamVolume(src.audioStream());
+				audioManager.setStreamVolume(src.audioStream(), vols[i], AudioManager.FLAG_SHOW_UI);
+			}
+			else if(originalValues[i] != null){
+				audioManager.setStreamVolume(src.audioStream(), originalValues[i], AudioManager.FLAG_SHOW_UI);
+				originalValues[i] = null;
+			}
+		}
 	}
 	
 	private String getAppName(String pkg){

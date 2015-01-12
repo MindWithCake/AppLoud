@@ -1096,11 +1096,11 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f090024;
         public static final int activity_chooser_view_content=0x7f090025;
         public static final int always=0x7f09000f;
-        public static final int appNameLine=0x7f090055;
-        public static final int app_detail=0x7f090056;
+        public static final int appNameLine=0x7f090056;
+        public static final int app_detail=0x7f090057;
         public static final int app_detail_container=0x7f09003e;
         public static final int app_detail_external_layout=0x7f09003c;
-        public static final int app_list=0x7f090053;
+        public static final int app_list=0x7f090054;
         public static final int beginning=0x7f090016;
         public static final int checkbox=0x7f09002d;
         public static final int collapseActionView=0x7f090010;
@@ -1112,9 +1112,9 @@ containing a value of this type.
         public static final int end=0x7f090017;
         public static final int expand_activities_button=0x7f090026;
         public static final int expanded_menu=0x7f09002c;
-        public static final int first_column_separator=0x7f09004f;
-        public static final int first_row=0x7f09004d;
-        public static final int first_row_separator=0x7f09004e;
+        public static final int first_column_separator=0x7f090050;
+        public static final int first_row=0x7f09004e;
+        public static final int first_row_separator=0x7f09004f;
         public static final int hint_text=0x7f09003f;
         public static final int home=0x7f090000;
         public static final int homeAsUp=0x7f09000a;
@@ -1133,7 +1133,7 @@ containing a value of this type.
         public static final int notify_bar=0x7f090048;
         public static final int notify_check=0x7f090047;
         public static final int notify_symbol=0x7f090046;
-        public static final int packageLine=0x7f090054;
+        public static final int packageLine=0x7f090055;
         public static final int progress_circular=0x7f090004;
         public static final int progress_horizontal=0x7f090005;
         public static final int radio=0x7f09002f;
@@ -1150,9 +1150,9 @@ containing a value of this type.
         public static final int search_plate=0x7f090036;
         public static final int search_src_text=0x7f090037;
         public static final int search_voice_btn=0x7f09003b;
-        public static final int second_column_separator=0x7f090050;
-        public static final int second_row=0x7f090051;
-        public static final int second_row_separator=0x7f090052;
+        public static final int second_column_separator=0x7f090051;
+        public static final int second_row=0x7f090052;
+        public static final int second_row_separator=0x7f090053;
         public static final int shortcut=0x7f09002e;
         public static final int showCustom=0x7f09000b;
         public static final int showHome=0x7f09000c;
@@ -1165,6 +1165,7 @@ containing a value of this type.
         public static final int tabMode=0x7f090008;
         public static final int title=0x7f09002b;
         public static final int title_container=0x7f09004c;
+        public static final int title_separator=0x7f09004d;
         public static final int top_action_bar=0x7f090020;
         public static final int up=0x7f090021;
         public static final int useLogo=0x7f09000e;
