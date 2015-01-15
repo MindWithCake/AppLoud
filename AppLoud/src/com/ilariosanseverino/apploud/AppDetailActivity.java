@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.app.Activity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +26,7 @@ import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link AppDetailFragment}.
  */
-public class AppDetailActivity extends ActionBarActivity implements OnClickListener, OnSeekBarChangeListener {
+public class AppDetailActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 	private Intent serviceIntent;
 	private AudioManager audioManager;
 	private AppListItem item;
@@ -50,7 +49,6 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 				bar.setEnabled(!box.isChecked());
 				bar.invalidate();
 			}
-			Log.i("DetailActivity", "connessione avvenuta");
 		}
 
 		@Override
@@ -68,7 +66,7 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		
 		// Show the Up button in the action bar.
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// For more information, see the Fragments API guide at:
 		// http://developer.android.com/guide/components/fragments.html
@@ -78,7 +76,7 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 			arguments.putParcelable(AppListActivity.ITEM_ARG, item);
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().replace(
+			getFragmentManager().beginTransaction().replace(
 					R.id.app_detail_container, fragment).commit();
 		}
 		
@@ -111,10 +109,8 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 	
 	@Override
 	public void onClick(View v){
-		Log.i("ClickListener", "box checkata");
 		if(binder == null)
 			return;
-		Log.i("ClickListener", "binder non è null");
 		boolean shouldEnable = !((CheckBox)v).isChecked();
 		for(AudioSource src: AudioSource.values()){
 			if(v.getId() == src.checkId()){
@@ -129,7 +125,6 @@ public class AppDetailActivity extends ActionBarActivity implements OnClickListe
 	public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser){
 		if(binder == null || !fromUser)
 			return;
-		Log.i("ProgressListener", "Progress Bar modificata");
 		for(AudioSource src: AudioSource.values()){
 			if(src.seekId() == seekBar.getId()){
 				binder.updateStream(item, src.columnName(), progress);

@@ -2,14 +2,16 @@ package com.ilariosanseverino.apploud;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.ilariosanseverino.apploud.UI.AppListDataModel;
 import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.UI.SettingsFragment;
 import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
@@ -29,7 +31,7 @@ import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
  * This activity also implements the required {@link AppListFragment.Callbacks}
  * interface to listen for item selections.
  */
-public class AppListActivity extends FragmentActivity implements AppListFragment.Callbacks {
+public class AppListActivity extends Activity implements AppListFragment.Callbacks {
 	private boolean mTwoPane; //Whether or not the activity is in two-pane mode
 	private Intent serviceIntent;
 	private AppListDataModel dataModel;
@@ -39,7 +41,7 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 		public void doOnServiceConnected(){
 			Log.i("ListActivity", "servizio della lista connesso");
 			dataModel = new AppListDataModel(binder);
-			FragmentManager fragmentManager = getSupportFragmentManager();
+			FragmentManager fragmentManager = getFragmentManager();
 			setContentView(R.layout.activity_app_list);
 
 			if(findViewById(R.id.app_detail_container) != null){
@@ -106,7 +108,7 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 			arguments.putParcelable(ITEM_ARG, dataModel.getAppList().get((int)id));
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().replace(
+			getFragmentManager().beginTransaction().replace(
 					R.id.app_detail_container, fragment).commit();
 		}
 		else{
@@ -114,6 +116,18 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 			AppListItem item = dataModel.getAppList().get((int)id);
 			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
+		}
+	}
+	
+	@Override
+	  public boolean onOptionsItemSelected(MenuItem item){
+		switch (item.getItemId()){
+		case R.id.action_settings:
+			 getFragmentManager().beginTransaction().replace(
+					 R.id.app_list, new SettingsFragment()).addToBackStack(null).commit();
+			 return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 }

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.db.AppSQLiteHelper;
 
@@ -70,10 +69,8 @@ public class BackgroundService extends Service {
 			if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL){
 				if(!threadRunning)
 					thread.start();
-				Log.i("Service", "thread avviato per ringer mode ON");
 			} else if(threadRunning){
 				thread.interrupt();
-				Log.i("Service", "Thread fermato per ringer mode OFF");
 			}
 		}
 	}

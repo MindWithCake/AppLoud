@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
@@ -81,17 +81,17 @@ public class AppListFragment extends ListFragment {
 		setListAdapter(new AppListAdapter(getActivity(), appList));
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState){
-		super.onViewCreated(view, savedInstanceState);
-
-		// Restore the previously serialized activated item position.
-		if(savedInstanceState != null
-				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)){
-			setActivatedPosition(savedInstanceState
-					.getInt(STATE_ACTIVATED_POSITION));
-		}
-	}
+//	@Override
+//	public void onViewCreated(View view, Bundle savedInstanceState){
+//		super.onViewCreated(view, savedInstanceState);
+//
+//		// Restore the previously serialized activated item position.
+//		if(savedInstanceState != null
+//				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)){
+//			setActivatedPosition(savedInstanceState
+//					.getInt(STATE_ACTIVATED_POSITION));
+//		}
+//	}
 
 	@Override
 	public void onAttach(Activity activity){
@@ -137,12 +137,12 @@ public class AppListFragment extends ListFragment {
 				ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private void setActivatedPosition(int position){
-		if(position == ListView.INVALID_POSITION)
-			getListView().setItemChecked(mActivatedPosition, false);
-		else
-			getListView().setItemChecked(position, true);
-
-		mActivatedPosition = position;
-	}
+//	private void setActivatedPosition(int position){
+//		if(position == ListView.INVALID_POSITION)
+//			getListView().setItemChecked(mActivatedPosition, false);
+//		else
+//			getListView().setItemChecked(position, true);
+//
+//		mActivatedPosition = position;
+//	}
 }
