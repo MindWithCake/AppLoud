@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+	<CheckBoxPreference
+        android:key="visual_feed"
+        android:title="@string/setting_visual_feedback"
+        android:summary="@string/setting_visual_feedback_summ"
+        android:defaultValue="false" />
+	<CheckBoxPreference
+        android:key="vibro_feed"
+        android:title="@string/setting_vibro_feedback"
+        android:summary="@string/setting_vibro_feedback_summ"
+        android:defaultValue="true" />
+	<CheckBoxPreference
+        android:key="audio_feed"
+        android:title="@string/setting_audio_feedback"
+        android:summary="@string/setting_audio_feedback_summ"
+        android:defaultValue="false" />
+</PreferenceScreen>

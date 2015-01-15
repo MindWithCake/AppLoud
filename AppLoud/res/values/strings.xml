@@ -13,4 +13,13 @@
 	<string name="toggle_button">Ignora</string>
 	<string name="detail_frag_role">Imposta il volume desiderato, oppure seleziona \
 		"Ignora" per mantenere il volume inalterato</string>
+	<string name="setting_visual_feedback">Feedback visuale</string>
+	<string name="setting_visual_feedback_summ">Mostra la barra \
+		ogni volta che cambia il volume</string>
+	<string name="setting_vibro_feedback">Vibrazione</string>
+	<string name="setting_vibro_feedback_summ">Vibra ogni volta che cambia il volume</string>
+	<string name="setting_audio_feedback">Feedback sonoro</string>
+	<string name="setting_audio_feedback_summ">Riproduci un suono \
+		ogni volta che cambia il volume</string>
+	<string name="action_settings_title">Impostazioni</string>
 </resources>

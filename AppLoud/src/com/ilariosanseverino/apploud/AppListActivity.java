@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.ilariosanseverino.apploud.UI.AppListDataModel;
 import com.ilariosanseverino.apploud.UI.AppListItem;
@@ -84,6 +86,13 @@ public class AppListActivity extends FragmentActivity implements AppListFragment
 		serviceIntent = new Intent(this, BackgroundService.class);
 		Log.d("Activity", "avvio il servizio: "+startService(serviceIntent));
 		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT|BIND_AUTO_CREATE);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	/**
