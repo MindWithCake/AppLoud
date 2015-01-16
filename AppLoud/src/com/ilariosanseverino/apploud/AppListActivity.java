@@ -56,6 +56,7 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 			setContentView(R.layout.activity_app_list);
 
 			if(findViewById(R.id.app_detail_container) != null){
+				Log.i("AppList", "Riciclo frammento");
 				mTwoPane = true;
 				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).setActivateOnItemClick(true);
 
@@ -112,6 +113,12 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(dbReceiver);
 	}
 	
 	/**
