@@ -1,9 +1,14 @@
 package com.ilariosanseverino.apploud;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +19,7 @@ import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.UI.SettingsFragment;
 import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
+import com.ilariosanseverino.apploud.service.FillerThread;
 import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
 /**
@@ -36,10 +42,15 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 	private Intent serviceIntent;
 	private AppListDataModel dataModel;
 	private IBackgroundServiceBinder binder;
-	private final BackgroundConnection connection = new BackgroundConnection(){
+	private ProgressDialog progr;
+	public final static String DETAIL_FRAG_TAG = "Detail";
+	public final static String LIST_FRAG_TAG = "List";
+	public final static String ITEM_ARG = "appItem";
+	public final static String LIST_ARG = "apps";
+	
+	private final BroadcastReceiver dbReceiver = new BroadcastReceiver() {
 		@Override
-		public void doOnServiceConnected(){
-			Log.i("ListActivity", "servizio della lista connesso");
+		public void onReceive(Context context, Intent intent) {
 			dataModel = new AppListDataModel(binder);
 			FragmentManager fragmentManager = getFragmentManager();
 			setContentView(R.layout.activity_app_list);
@@ -68,26 +79,32 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 				fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
 			}
 			unbindService(connection);
+			progr.dismiss();
 		}
+	};
+	
+	private final BackgroundConnection connection = new BackgroundConnection(){
+		@Override
+		public void doOnServiceConnected(){}
 
 		@Override
 		public void setBinder(IBackgroundServiceBinder binder){
 			AppListActivity.this.binder = binder;
 		}
 	};
-	
-	public final static String DETAIL_FRAG_TAG = "Detail";
-	public final static String LIST_FRAG_TAG = "List";
-	public final static String ITEM_ARG = "appItem";
-	public final static String LIST_ARG = "apps";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
+				new IntentFilter(FillerThread.DB_FILLED_EVENT));
 		
 		serviceIntent = new Intent(this, BackgroundService.class);
 		Log.d("Activity", "avvio il servizio: "+startService(serviceIntent));
 		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT|BIND_AUTO_CREATE);
+		progr = ProgressDialog.show(this,
+				getResources().getString(R.string.progress_load_title),
+				getResources().getString(R.string.progress_load_summ));
 	}
 	
 	@Override

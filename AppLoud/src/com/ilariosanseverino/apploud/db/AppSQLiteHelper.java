@@ -14,7 +14,8 @@ import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry;
 
 public class AppSQLiteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
+	public static final String DATABASE_NAME = "AppVolList.db";
 	
 	private static final String SQL_CREATE = "create table "+AppEntry.TABLE_NAME+
 		" (" +AppEntry._ID + " INTEGER PRIMARY KEY," +
@@ -27,8 +28,7 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 		AppEntry.COLUMN_NAME_SYSTEM_STREAM+AppEntry.COLUMN_TYPE_RING_STREAM+","+
 		" UNIQUE("+AppEntry.COLUMN_NAME_APPNAME+", "+AppEntry.COLUMN_NAME_PACKAGE+"))";
 	
-	public static final String DATABASE_NAME = "AppVolList.db";
-    public final int STREAMS_NUMBER = AudioSource.values().length;
+    private final int STREAMS_NUMBER = AudioSource.values().length;
     private final String SELECT_APP =  AppEntry.COLUMN_NAME_APPNAME+"=? AND "+AppEntry.COLUMN_NAME_PACKAGE+"=?";
 
 	public AppSQLiteHelper(Context context){

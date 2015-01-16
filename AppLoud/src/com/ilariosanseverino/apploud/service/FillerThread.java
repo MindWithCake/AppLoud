@@ -2,9 +2,12 @@ package com.ilariosanseverino.apploud.service;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.ilariosanseverino.apploud.db.AppSQLiteHelper;
 
@@ -12,11 +15,15 @@ public class FillerThread extends Thread {
 	private AppSQLiteHelper helper;
 	private PackageManager pm;
 	private SQLiteDatabase db;
+	private Context ctx;
+	public final static String DB_FILLED_EVENT = "fillerthread-db-full";
 	
-	public FillerThread(AppSQLiteHelper helper, SQLiteDatabase db, PackageManager pm){
+	public FillerThread(Context ctx, AppSQLiteHelper helper, 
+			SQLiteDatabase db, PackageManager pm){
 		this.helper = helper;
 		this.db = db;
 		this.pm = pm;
+		this.ctx = ctx;
 	}
 	
 	@Override
@@ -26,5 +33,8 @@ public class FillerThread extends Thread {
 			String appName = pk.applicationInfo.loadLabel(pm).toString();
 			helper.createRowIfNew(db, pk.packageName, appName);
 		}
+		
+		Intent intent = new Intent(DB_FILLED_EVENT);
+		LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
 	}
 }

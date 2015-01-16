@@ -1294,6 +1294,8 @@ containing a value of this type.
         public static final int line_separator_descr=0x7f0b0013;
         public static final int media_icon_descr=0x7f0b0010;
         public static final int notify_icon_descr=0x7f0b0011;
+        public static final int progress_load_summ=0x7f0b001e;
+        public static final int progress_load_title=0x7f0b001d;
         public static final int ring_icon_descr=0x7f0b000f;
         public static final int setting_audio_feedback=0x7f0b001a;
         public static final int setting_audio_feedback_summ=0x7f0b001b;

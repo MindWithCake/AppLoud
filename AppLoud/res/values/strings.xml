@@ -22,4 +22,7 @@
 	<string name="setting_audio_feedback_summ">Riproduci un suono \
 		ogni volta che cambia il volume</string>
 	<string name="action_settings_title">Impostazioni</string>
+	<string name="progress_load_title">Caricando...</string>
+	<string name="progress_load_summ">Per favore, aspetta mentre i \
+		dati vengono caricati</string>
 </resources>

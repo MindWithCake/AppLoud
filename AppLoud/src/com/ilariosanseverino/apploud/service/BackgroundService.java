@@ -50,7 +50,7 @@ public class BackgroundService extends Service {
 	
 	@Override
 	public int onStartCommand (Intent intent, int flags, int startId){
-		new FillerThread(helper, db, packageManager).start();
+		new FillerThread(this, helper, db, packageManager).start();
 		if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL)
 			(thread = new BackgroundThread(BackgroundService.this)).start();
 		return START_STICKY;

@@ -2,16 +2,14 @@ package com.ilariosanseverino.apploud.service;
 
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.AudioSource;
 
-public class BackgroundThread extends Thread implements OnSharedPreferenceChangeListener {
+public class BackgroundThread extends Thread {
 	private long checkFrequency = 3000;
 	private BackgroundService owner;
 	private String lastPackage, lastApp, currentPackage, currentApp;
@@ -30,7 +28,6 @@ public class BackgroundThread extends Thread implements OnSharedPreferenceChange
 	@Override
 	public void run(){
 		owner.threadRunning = true;
-		prefs.registerOnSharedPreferenceChangeListener(this);
 		while(true){
 			long loopStartTime = System.currentTimeMillis();
 			checkAppChanged();
@@ -44,7 +41,6 @@ public class BackgroundThread extends Thread implements OnSharedPreferenceChange
 				break;
 			}
 		}
-		prefs.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
 	private void checkAppChanged(){
@@ -62,13 +58,7 @@ public class BackgroundThread extends Thread implements OnSharedPreferenceChange
 		Integer[] vols = owner.helper.getStreams(owner.db, currentApp, currentPackage);
 		int flags = 0;
 		for(VolumeFeedback feed: VolumeFeedback.values())
-//			flags |= prefs.getBoolean(feed.key, false)? 0 : feed.flag;
-		{
-			boolean b = prefs.getBoolean(feed.key, false);
-			Log.i("BgThread", "La preferenza di "+feed.key+" è "+b);
-			if(b)
-				flags |= feed.flag;
-		}
+			flags |= prefs.getBoolean(feed.key, false)? 0 : feed.flag;
 		
 		for(int i = 0; i < vols.length; ++i){
 			AudioSource src = AudioSource.values()[i];
@@ -96,10 +86,5 @@ public class BackgroundThread extends Thread implements OnSharedPreferenceChange
 	
 	private String appNameFromPkgInfo(PackageInfo info){
 		return info.applicationInfo.loadLabel(owner.packageManager).toString();
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key){
-		Log.i("BgThread", "Preferenza cambiata: "+key);
 	}
 }
