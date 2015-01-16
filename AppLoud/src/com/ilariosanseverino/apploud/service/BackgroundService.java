@@ -51,16 +51,13 @@ public class BackgroundService extends Service {
 	@Override
 	public int onStartCommand (Intent intent, int flags, int startId){
 		new FillerThread(helper, db, packageManager).start();
-		thread = new BackgroundThread(this);
 		if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL)
-			thread.start();
+			(thread = new BackgroundThread(BackgroundService.this)).start();
 		return START_STICKY;
 	}
 
 	@Override
 	public IBinder onBind(Intent intent){
-		if(thread == null)
-			return null;
 		return binder;
 	}
 	
@@ -68,10 +65,10 @@ public class BackgroundService extends Service {
 		public void onReceive(Context context, Intent intent){
 			if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL){
 				if(!threadRunning)
-					thread.start();
-			} else if(threadRunning){
+					(thread = new BackgroundThread(BackgroundService.this)).start();
+				threadRunning = true; // ridondante, ma non si sa mai...
+			} else if(threadRunning)
 				thread.interrupt();
-			}
 		}
 	}
 }
