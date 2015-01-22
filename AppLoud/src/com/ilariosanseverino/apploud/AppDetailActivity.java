@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.app.Activity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,9 +13,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.ilariosanseverino.apploud.UI.AppListItem;
-import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
-import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
 /**
  * An activity representing a single App detail screen. This activity is only
@@ -26,36 +23,29 @@ import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link AppDetailFragment}.
  */
-public class AppDetailActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
+public class AppDetailActivity extends AppLoudMenuActivity implements OnClickListener, OnSeekBarChangeListener {
 	private Intent serviceIntent;
 	private AudioManager audioManager;
 	private AppListItem item;
-	private IBackgroundServiceBinder binder;
-	private BackgroundConnection connection = new BackgroundConnection(){
-		@Override
-		public void doOnServiceConnected(){
-			AppDetailActivity act = AppDetailActivity.this;
-			Integer[] volumes = binder.getStreamValues(item);
-			AudioSource[] src = AudioSource.values();
-			for(int i = 0; i < volumes.length; ++i){
-				CheckBox box = (CheckBox)act.findViewById(src[i].checkId());
-				if(volumes[i] == null || volumes[i].intValue() < 0){
-					box.setChecked(true);
-					box.invalidate();
-					volumes[i] = volumes[i] == null? 0 : -volumes[i];
-				}
-				SeekBar bar = (SeekBar)act.findViewById(src[i].seekId());
-				bar.setProgress(volumes[i]);
-				bar.setEnabled(!box.isChecked());
-				bar.invalidate();
+	
+	@Override
+	public void doOnServiceConnected(){
+		AppDetailActivity act = AppDetailActivity.this;
+		Integer[] volumes = binder.getStreamValues(item);
+		AudioSource[] src = AudioSource.values();
+		for(int i = 0; i < volumes.length; ++i){
+			CheckBox box = (CheckBox)act.findViewById(src[i].checkId());
+			if(volumes[i] == null || volumes[i].intValue() < 0){
+				box.setChecked(true);
+				box.invalidate();
+				volumes[i] = volumes[i] == null? 0 : -volumes[i];
 			}
+			SeekBar bar = (SeekBar)act.findViewById(src[i].seekId());
+			bar.setProgress(volumes[i]);
+			bar.setEnabled(!box.isChecked());
+			bar.invalidate();
 		}
-
-		@Override
-		public void setBinder(IBackgroundServiceBinder binder){
-			AppDetailActivity.this.binder = binder;
-		}
-	};
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){

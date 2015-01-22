@@ -1,6 +1,5 @@
 package com.ilariosanseverino.apploud;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -12,15 +11,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.ilariosanseverino.apploud.UI.AppListDataModel;
 import com.ilariosanseverino.apploud.UI.AppListItem;
-import com.ilariosanseverino.apploud.UI.SettingsFragment;
-import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
-import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
 /**
  * An activity representing a list of Apps. This activity has different
@@ -37,11 +32,9 @@ import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
  * This activity also implements the required {@link AppListFragment.Callbacks}
  * interface to listen for item selections.
  */
-public class AppListActivity extends Activity implements AppListFragment.Callbacks {
+public class AppListActivity extends AppLoudMenuActivity implements AppListFragment.Callbacks {
 	private boolean mTwoPane; //Whether or not the activity is in two-pane mode
-	private Intent serviceIntent;
 	private AppListDataModel dataModel;
-	private IBackgroundServiceBinder binder;
 	private ProgressDialog progr;
 	public final static String DETAIL_FRAG_TAG = "Detail";
 	public final static String LIST_FRAG_TAG = "List";
@@ -84,24 +77,16 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 		}
 	};
 	
-	private final BackgroundConnection connection = new BackgroundConnection(){
-		@Override
-		public void doOnServiceConnected(){}
-
-		@Override
-		public void setBinder(IBackgroundServiceBinder binder){
-			AppListActivity.this.binder = binder;
-		}
-	};
+	@Override
+	protected void doOnServiceConnected(){}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
 				new IntentFilter(FillerThread.DB_FILLED_EVENT));
-		
-		serviceIntent = new Intent(this, BackgroundService.class);
-		Log.d("Activity", "avvio il servizio: "+startService(serviceIntent));
+		Intent serviceIntent = new Intent(this, BackgroundService.class);
+		startService(serviceIntent);
 		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT|BIND_AUTO_CREATE);
 		progr = ProgressDialog.show(this,
 				getResources().getString(R.string.progress_load_title),
@@ -140,18 +125,6 @@ public class AppListActivity extends Activity implements AppListFragment.Callbac
 			AppListItem item = dataModel.getAppList().get((int)id);
 			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
-		}
-	}
-	
-	@Override
-	  public boolean onOptionsItemSelected(MenuItem item){
-		switch (item.getItemId()){
-		case R.id.action_settings:
-			 getFragmentManager().beginTransaction().replace(
-					 R.id.app_list, new SettingsFragment()).addToBackStack(null).commit();
-			 return true;
-		default:
-			return super.onOptionsItemSelected(item);
 		}
 	}
 }

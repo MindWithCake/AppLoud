@@ -14,4 +14,6 @@ public interface IBackgroundServiceBinder {
 	public void setStreamEnabled(AppListItem item, String streamName, boolean enabled);
 	
 	public Integer[] getStreamValues(AppListItem item);
+	
+	public boolean changeThreadActiveStatus();
 }

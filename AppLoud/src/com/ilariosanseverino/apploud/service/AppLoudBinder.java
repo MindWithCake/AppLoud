@@ -1,14 +1,22 @@
 package com.ilariosanseverino.apploud.service;
 
 import java.util.ArrayList;
+
+import android.content.SharedPreferences.Editor;
 import android.os.Binder;
+import android.preference.PreferenceManager;
+
 import com.ilariosanseverino.apploud.UI.AppListItem;
 
 public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 	private BackgroundService service;
+	private Editor prefEdit;
 	
 	public AppLoudBinder(BackgroundService service){
 		this.service = service;
+		prefEdit =  PreferenceManager.
+				getDefaultSharedPreferences(service.getApplicationContext()).
+				edit();
 	}
 	
 	public void quitService(){
@@ -29,5 +37,13 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 
 	public Integer[] getStreamValues(AppListItem item){
 		return service.helper.getStreams(service.db, item.appName(), item.appPkg());
+	}
+	
+	public boolean changeThreadActiveStatus(){
+		service.threadShouldRun = !service.threadShouldRun;
+		service.changeThreadStatus();
+		prefEdit.putBoolean(BackgroundService.THREAD_PREF_KEY, service.threadShouldRun);
+		prefEdit.commit();
+		return service.threadShouldRun;
 	}
 }

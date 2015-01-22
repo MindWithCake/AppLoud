@@ -1076,10 +1076,12 @@ containing a value of this type.
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
         public static final int grey_line=0x7f020057;
         public static final int ic_action_chat=0x7f020058;
-        public static final int ic_action_phone=0x7f020059;
-        public static final int ic_action_ring_volume=0x7f02005a;
-        public static final int ic_action_volume_on=0x7f02005b;
-        public static final int ic_launcher=0x7f02005c;
+        public static final int ic_action_pause=0x7f020059;
+        public static final int ic_action_phone=0x7f02005a;
+        public static final int ic_action_play=0x7f02005b;
+        public static final int ic_action_ring_volume=0x7f02005c;
+        public static final int ic_action_volume_on=0x7f02005d;
+        public static final int ic_launcher=0x7f02005e;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0a003d;
@@ -1094,7 +1096,10 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0a0002;
         public static final int action_menu_presenter=0x7f0a0003;
         public static final int action_mode_close_button=0x7f0a0024;
-        public static final int action_settings=0x7f0a0058;
+        public static final int action_settings=0x7f0a005a;
+        public static final int action_show_info=0x7f0a005b;
+        public static final int action_start_svc=0x7f0a0059;
+        public static final int action_stop_svc=0x7f0a0058;
         public static final int activity_chooser_view_content=0x7f0a0025;
         public static final int always=0x7f0a000f;
         public static final int appNameLine=0x7f0a0056;
@@ -1291,11 +1296,13 @@ containing a value of this type.
         public static final int action_settings_title=0x7f0b001c;
         public static final int app_name=0x7f0b000d;
         public static final int detail_frag_role=0x7f0b0015;
+        public static final int info_menu_title=0x7f0b0021;
         public static final int line_separator_descr=0x7f0b0013;
         public static final int media_icon_descr=0x7f0b0010;
         public static final int notify_icon_descr=0x7f0b0011;
         public static final int progress_load_summ=0x7f0b001e;
         public static final int progress_load_title=0x7f0b001d;
+        public static final int restart_menu_title=0x7f0b0020;
         public static final int ring_icon_descr=0x7f0b000f;
         public static final int setting_audio_feedback=0x7f0b001a;
         public static final int setting_audio_feedback_summ=0x7f0b001b;
@@ -1303,6 +1310,7 @@ containing a value of this type.
         public static final int setting_vibro_feedback_summ=0x7f0b0019;
         public static final int setting_visual_feedback=0x7f0b0016;
         public static final int setting_visual_feedback_summ=0x7f0b0017;
+        public static final int stop_menu_title=0x7f0b001f;
         public static final int sys_icon_descr=0x7f0b0012;
         public static final int title_app_detail=0x7f0b000e;
         public static final int toggle_button=0x7f0b0014;
