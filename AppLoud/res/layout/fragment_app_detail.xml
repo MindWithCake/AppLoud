@@ -1,10 +1,184 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/app_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:gravity="center"
-    android:textIsSelectable="true"
-    tools:context="com.ilariosanseverino.apploud.AppDetailFragment" />
-<!--  android:padding="16dp" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/app_detail_external_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:weightSum="1"
+	tools:context="com.ilariosanseverino.apploud.AppDetailFragment"
+	tools:ignore="MergeRootFrame" >
+
+	<RelativeLayout
+		android:id="@+id/RelativeLayout1"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.2"
+		android:gravity="center" >
+
+		<TextView
+			android:id="@+id/app_detail"
+			style="?android:attr/textAppearanceLarge"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textIsSelectable="true" />
+
+		<TextView
+			android:id="@+id/hint_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_below="@id/app_detail"
+			android:gravity="center_horizontal"
+			android:text="@string/detail_frag_role" />
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.2" >
+
+		<ImageView
+			android:id="@+id/ring_symbol"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:contentDescription="@string/ring_icon_descr"
+			android:src="@drawable/ic_action_ring_volume" />
+
+		<CheckBox
+			android:id="@+id/ring_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@+id/ring_bar"
+			android:layout_alignParentRight="true"
+			android:text="@string/toggle_button" />
+
+		<SeekBar
+			android:id="@+id/ring_bar"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/ring_symbol"
+			android:layout_toLeftOf="@id/ring_check"
+			android:layout_toRightOf="@id/ring_symbol" />
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.2" >
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="1px"
+			android:layout_marginLeft="30dp"
+			android:layout_marginRight="30dp"
+			android:background="@color/light_gray" >
+		</FrameLayout>
+
+		<ImageView
+			android:id="@+id/media_symbol"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:contentDescription="@string/media_icon_descr"
+			android:src="@drawable/ic_action_volume_on" />
+
+		<CheckBox
+			android:id="@+id/media_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@+id/media_bar"
+			android:layout_alignParentRight="true"
+			android:text="@string/toggle_button" />
+
+		<SeekBar
+			android:id="@+id/media_bar"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/media_symbol"
+			android:layout_toLeftOf="@id/media_check"
+			android:layout_toRightOf="@id/media_symbol" />
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.2" >
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="1px"
+			android:layout_marginLeft="30dp"
+			android:layout_marginRight="30dp"
+			android:background="@color/light_gray" >
+		</FrameLayout>
+
+		<ImageView
+			android:id="@+id/notify_symbol"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:contentDescription="@string/notify_icon_descr"
+			android:src="@drawable/ic_action_chat" />
+
+		<CheckBox
+			android:id="@+id/notify_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_alignTop="@+id/notify_bar"
+			android:text="@string/toggle_button" />
+
+		<SeekBar
+			android:id="@+id/notify_bar"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/notify_symbol"
+			android:layout_toLeftOf="@id/notify_check"
+			android:layout_toRightOf="@id/notify_symbol" />
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.2" >
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="1px"
+			android:layout_marginLeft="30dp"
+			android:layout_marginRight="30dp"
+			android:background="@color/light_gray" >
+		</FrameLayout>
+
+		<ImageView
+			android:id="@+id/sys_symbol"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:contentDescription="@string/sys_icon_descr"
+			android:src="@drawable/ic_action_phone" />
+
+		<CheckBox
+			android:id="@+id/sys_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_alignTop="@+id/sys_bar"
+			android:text="@string/toggle_button" />
+
+		<SeekBar
+			android:id="@+id/sys_bar"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/sys_symbol"
+			android:layout_toLeftOf="@id/sys_check"
+			android:layout_toRightOf="@id/sys_symbol" />
+	</RelativeLayout>
+
+</LinearLayout><!-- android:padding="16dp" -->

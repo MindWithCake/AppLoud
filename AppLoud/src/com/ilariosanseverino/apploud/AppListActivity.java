@@ -9,8 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import com.ilariosanseverino.apploud.UI.AppListDataModel;
 import com.ilariosanseverino.apploud.UI.AppListItem;
@@ -94,13 +92,6 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_menu, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
 	public void onPause(){
 		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(dbReceiver);
@@ -126,5 +117,10 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
 		}
+	}
+
+	@Override
+	protected int getContainerID(){
+		return R.id.app_list;
 	}
 }

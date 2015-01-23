@@ -37,6 +37,7 @@
             android:enabled="true"
             android:exported="false" >
         </service>
+        <activity android:name=".UI.SettingsFragment" />
     </application>
 
 </manifest>

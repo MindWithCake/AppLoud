@@ -1,8 +1,6 @@
 package com.ilariosanseverino.apploud;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -25,7 +23,6 @@ import com.ilariosanseverino.apploud.service.BackgroundService;
  */
 public class AppDetailActivity extends AppLoudMenuActivity implements OnClickListener, OnSeekBarChangeListener {
 	private Intent serviceIntent;
-	private AudioManager audioManager;
 	private AppListItem item;
 	
 	@Override
@@ -53,7 +50,6 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 		serviceIntent = new Intent(this, BackgroundService.class);
 		bindService(serviceIntent, connection, BIND_AUTO_CREATE);
 		setContentView(R.layout.activity_app_detail);
-		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,13 +64,6 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction().replace(
 					R.id.app_detail_container, fragment).commit();
-		}
-		
-		for(AudioSource src: AudioSource.values()){
-			findViewById(src.checkId()).setOnClickListener(this);
-			SeekBar seekBar = (SeekBar)findViewById(src.seekId());
-			seekBar.setOnSeekBarChangeListener(this);
-			seekBar.setMax(audioManager.getStreamMaxVolume(src.audioStream()));
 		}
 	}
 	
@@ -125,4 +114,9 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 
 	@Override public void onStartTrackingTouch(SeekBar seekBar){}
 	@Override public void onStopTrackingTouch(SeekBar seekBar){}
+
+	@Override
+	protected int getContainerID(){
+		return R.id.app_detail_container;
+	}
 }

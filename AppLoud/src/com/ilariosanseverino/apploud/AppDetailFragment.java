@@ -1,10 +1,13 @@
 package com.ilariosanseverino.apploud;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
+import android.media.AudioManager;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ilariosanseverino.apploud.UI.AppListItem;
@@ -44,5 +47,19 @@ public class AppDetailFragment extends Fragment {
 				item != null? item.appName() : "No details available");
 
 		return rootView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		for(AudioSource src: AudioSource.values()){
+			View view = getView();
+			AppDetailActivity act = (AppDetailActivity)getActivity();
+			view.findViewById(src.checkId()).setOnClickListener(act);
+			SeekBar seekBar = (SeekBar)view.findViewById(src.seekId());
+			seekBar.setOnSeekBarChangeListener(act);
+			AudioManager am = (AudioManager)act.getSystemService(Context.AUDIO_SERVICE);
+			seekBar.setMax(am.getStreamMaxVolume(src.audioStream()));
+		}
 	}
 }
