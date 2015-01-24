@@ -13,14 +13,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 
-/**
- * An activity representing a single App detail screen. This activity is only
- * used on handset devices. On tablet-size devices, item details are presented
- * side-by-side with a list of items in a {@link AppListActivity}.
- * <p>
- * This activity is mostly just a 'shell' activity containing nothing more than
- * a {@link AppDetailFragment}.
- */
 public class AppDetailActivity extends AppLoudMenuActivity implements OnClickListener, OnSeekBarChangeListener {
 	private Intent serviceIntent;
 	private AppListItem item;

@@ -81,18 +81,6 @@ public class AppListFragment extends ListFragment {
 		setListAdapter(new AppListAdapter(getActivity(), appList));
 	}
 
-//	@Override
-//	public void onViewCreated(View view, Bundle savedInstanceState){
-//		super.onViewCreated(view, savedInstanceState);
-//
-//		// Restore the previously serialized activated item position.
-//		if(savedInstanceState != null
-//				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)){
-//			setActivatedPosition(savedInstanceState
-//					.getInt(STATE_ACTIVATED_POSITION));
-//		}
-//	}
-
 	@Override
 	public void onAttach(Activity activity){
 		super.onAttach(activity);
@@ -136,13 +124,4 @@ public class AppListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick?
 				ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
-
-//	private void setActivatedPosition(int position){
-//		if(position == ListView.INVALID_POSITION)
-//			getListView().setItemChecked(mActivatedPosition, false);
-//		else
-//			getListView().setItemChecked(position, true);
-//
-//		mActivatedPosition = position;
-//	}
 }

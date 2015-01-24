@@ -1084,7 +1084,7 @@ containing a value of this type.
         public static final int ic_launcher=0x7f02005e;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f0a0056;
+        public static final int RelativeLayout1=0x7f0a0058;
         public static final int action_bar=0x7f0a001c;
         public static final int action_bar_activity_content=0x7f0a0001;
         public static final int action_bar_container=0x7f0a001b;
@@ -1096,13 +1096,13 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0a0002;
         public static final int action_menu_presenter=0x7f0a0003;
         public static final int action_mode_close_button=0x7f0a0024;
-        public static final int action_settings=0x7f0a0059;
-        public static final int action_show_info=0x7f0a005a;
-        public static final int action_start_svc=0x7f0a0058;
+        public static final int action_settings=0x7f0a005b;
+        public static final int action_show_info=0x7f0a005c;
+        public static final int action_start_svc=0x7f0a005a;
         public static final int activity_chooser_view_content=0x7f0a0025;
         public static final int always=0x7f0a000f;
-        public static final int appNameLine=0x7f0a0055;
-        public static final int app_detail=0x7f0a0057;
+        public static final int appNameLine=0x7f0a0057;
+        public static final int app_detail=0x7f0a0059;
         public static final int app_detail_container=0x7f0a003c;
         public static final int app_detail_external_layout=0x7f0a003d;
         public static final int app_list=0x7f0a0053;
@@ -1138,7 +1138,9 @@ containing a value of this type.
         public static final int notify_bar=0x7f0a004f;
         public static final int notify_check=0x7f0a004e;
         public static final int notify_symbol=0x7f0a004d;
-        public static final int packageLine=0x7f0a0054;
+        public static final int packageLine=0x7f0a0056;
+        public static final int play_button=0x7f0a0054;
+        public static final int play_label=0x7f0a0055;
         public static final int progress_circular=0x7f0a0004;
         public static final int progress_horizontal=0x7f0a0005;
         public static final int radio=0x7f0a002f;
@@ -1244,9 +1246,10 @@ containing a value of this type.
          */
         public static final int activity_app_list=0x7f030019;
         public static final int activity_app_twopane=0x7f03001a;
-        public static final int app_list_element=0x7f03001b;
-        public static final int fragment_app_detail=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int activity_start_stop=0x7f03001b;
+        public static final int app_list_element=0x7f03001c;
+        public static final int fragment_app_detail=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class menu {
         public static final int main_menu=0x7f0d0000;
@@ -1299,9 +1302,9 @@ containing a value of this type.
         public static final int line_separator_descr=0x7f0b0013;
         public static final int media_icon_descr=0x7f0b0010;
         public static final int notify_icon_descr=0x7f0b0011;
+        public static final int play_pause_summ=0x7f0b0022;
         public static final int progress_load_summ=0x7f0b001e;
         public static final int progress_load_title=0x7f0b001d;
-        public static final int restart_menu_title=0x7f0b0020;
         public static final int ring_icon_descr=0x7f0b000f;
         public static final int setting_audio_feedback=0x7f0b001a;
         public static final int setting_audio_feedback_summ=0x7f0b001b;
@@ -1309,6 +1312,7 @@ containing a value of this type.
         public static final int setting_vibro_feedback_summ=0x7f0b0019;
         public static final int setting_visual_feedback=0x7f0b0016;
         public static final int setting_visual_feedback_summ=0x7f0b0017;
+        public static final int start_menu_title=0x7f0b0020;
         public static final int stop_menu_title=0x7f0b001f;
         public static final int sys_icon_descr=0x7f0b0012;
         public static final int title_app_detail=0x7f0b000e;

@@ -8,7 +8,7 @@
 		android:showAsAction="ifRoom" /> -->
 	
 	<item android:id="@+id/action_start_svc"
-		android:title="@string/restart_menu_title"
+		android:title="@string/start_menu_title"
 		android:menuCategory="alternative"
 		android:icon="@drawable/ic_action_play"
 		android:showAsAction="ifRoom" />

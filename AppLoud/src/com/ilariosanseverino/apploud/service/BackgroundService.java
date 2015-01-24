@@ -1,11 +1,11 @@
 package com.ilariosanseverino.apploud.service;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
@@ -15,13 +15,12 @@ import android.util.Log;
 
 import com.ilariosanseverino.apploud.db.AppSQLiteHelper;
 
-public class BackgroundService extends Service {
+public class BackgroundService extends AppLoudPreferenceListenerService {
 	public final static String THREAD_PREF_KEY = "pref_thread_status";
 	protected PackageManager packageManager;
 	protected ActivityManager activityManager;
 	protected AudioManager audioManager;
 	protected boolean threadRunning = false;
-	protected boolean threadShouldRun = true;
 	
 	private IBinder binder;
 	private BackgroundThread thread;
@@ -44,7 +43,6 @@ public class BackgroundService extends Service {
 	
 	@Override
 	public void onDestroy(){
-		Log.i("Svc", "Servizio distrutto, shouldRun è "+threadShouldRun);
 		thread.interrupt();
 		try{
 			thread.join();
@@ -58,10 +56,10 @@ public class BackgroundService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId){
-		threadShouldRun = PreferenceManager.
-				getDefaultSharedPreferences(this.getApplicationContext()).
-				getBoolean(THREAD_PREF_KEY, true);
-		Log.i("Svc", "Servizio startato, should run è "+threadShouldRun);
+		SharedPreferences pref = PreferenceManager.
+				getDefaultSharedPreferences(this.getApplicationContext());
+		threadShouldRun = pref.getBoolean(THREAD_PREF_KEY, true);
+		decideFlags(pref);
 		new FillerThread(this, helper, db, packageManager).start();
 		thread = new BackgroundThread(this);
 		changeThreadStatus();
@@ -73,6 +71,7 @@ public class BackgroundService extends Service {
 		return binder;
 	}
 	
+	@Override
 	protected void changeThreadStatus(){
 		Log.i("Service", "change status: should run = "+threadShouldRun);
 		if(!threadShouldRun)

@@ -25,8 +25,7 @@ public class AppDetailFragment extends Fragment {
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public AppDetailFragment(){
-	}
+	public AppDetailFragment(){}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
