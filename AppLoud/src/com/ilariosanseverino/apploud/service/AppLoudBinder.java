@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.preference.PreferenceManager;
 
-import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 	private BackgroundService service;

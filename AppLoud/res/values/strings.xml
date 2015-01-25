@@ -28,5 +28,9 @@
 	<string name="stop_menu_title">Ferma</string>
 	<string name="start_menu_title">Avvia</string>
 	<string name="info_menu_title">Informazioni</string>
-	<string name="play_pause_summ">Ferma/riavvia il controllo del volume</string>
+	<!-- <string name="play_pause_summ">Ferma/riavvia il controllo del volume</string> -->
+	<string name="status_on">attivato</string>
+	<string name="status_off">disattivato</string>
+	<string name="status_summ">Il controllo del volume è:</string>
+	
 </resources>

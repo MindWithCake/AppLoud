@@ -8,8 +8,8 @@ import android.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
-import com.ilariosanseverino.apploud.UI.AppListAdapter;
-import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.ui.AppListAdapter;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 /**
  * A list fragment representing a list of Apps. This fragment also supports

@@ -10,8 +10,8 @@ import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.service.BackgroundService;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppDetailActivity extends AppLoudMenuActivity implements OnClickListener, OnSeekBarChangeListener {
 	private Intent serviceIntent;

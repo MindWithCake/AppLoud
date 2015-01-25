@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.ilariosanseverino.apploud.AudioSource;
-import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppSQLiteHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 7;

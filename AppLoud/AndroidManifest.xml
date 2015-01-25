@@ -25,11 +25,10 @@
         </activity>
         <activity
             android:name=".AppDetailActivity"
-            android:label="@string/title_app_detail"
-            android:parentActivityName=".AppListActivity" >
-            <meta-data
+            android:label="@string/title_app_detail" >
+            <!-- <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ilariosanseverino.apploud.AppListActivity" />
+                android:value="com.ilariosanseverino.apploud.AppListActivity" /> -->
         </activity>
          <service
             android:name="com.ilariosanseverino.apploud.service.BackgroundService"
@@ -37,8 +36,8 @@
             android:exported="false" >
         </service>
         <activity
-        	android:name=".UI.PlayPauseActivity"
-        	android:theme="@android:style/Theme.Dialog" />
+        	android:name="com.ilariosanseverino.apploud.ui.PlayPauseActivity"
+        	android:theme="@style/NoTitleDialog" />
     </application>
 
 </manifest>

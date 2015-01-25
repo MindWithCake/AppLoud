@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.ilariosanseverino.apploud.UI.AppListItem;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 /**
  * A fragment representing a single App detail screen. This fragment is either

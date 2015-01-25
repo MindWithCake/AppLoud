@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.ilariosanseverino.apploud.UI.AppListDataModel;
-import com.ilariosanseverino.apploud.UI.AppListItem;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
+import com.ilariosanseverino.apploud.ui.AppListDataModel;
+import com.ilariosanseverino.apploud.ui.AppListItem;
 
 /**
  * An activity representing a list of Apps. This activity has different

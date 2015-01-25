@@ -9,10 +9,10 @@
         android:key="vibro_feed"
         android:title="@string/setting_vibro_feedback"
         android:summary="@string/setting_vibro_feedback_summ"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 	<CheckBoxPreference
         android:key="audio_feed"
         android:title="@string/setting_audio_feedback"
         android:summary="@string/setting_audio_feedback_summ"
-        android:defaultValue="false" />
+        android:defaultValue="true" />
 </PreferenceScreen>

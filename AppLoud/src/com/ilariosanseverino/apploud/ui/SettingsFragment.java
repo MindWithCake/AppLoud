@@ -1,4 +1,4 @@
-package com.ilariosanseverino.apploud.UI;
+package com.ilariosanseverino.apploud.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

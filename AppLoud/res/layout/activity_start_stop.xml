@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:gravity="center" >
+
+    <TextView
+    	android:id="@+id/status_label_1"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentTop="true"
+    	android:layout_centerHorizontal="true"
+    	android:text="@string/status_summ"
+    	android:padding="5dp" />
+
+    <TextView
+    	android:id="@+id/status_label_2"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_centerHorizontal="true"
+    	android:layout_below="@id/status_label_1"
+    	android:text="@string/status_on"
+    	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+    	android:id="@+id/play_button"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_centerHorizontal="true"
+    	android:layout_below="@id/status_label_2"
+    	android:layout_gravity="center"
+    	android:text="@string/stop_menu_title"
+    	android:drawableLeft="@drawable/ic_action_pause"
+    	android:onClick="changeServiceState"
+    	android:paddingRight="10dp"
+    	android:layout_margin="10dp" />
+
+    <!-- <TextView
+    	android:id="@+id/play_label"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@id/play_button"
+    	android:layout_gravity="center"
+    	android:text="@string/play_pause_summ"
+    	android:layout_centerHorizontal="true" /> -->
+   
+</RelativeLayout>
