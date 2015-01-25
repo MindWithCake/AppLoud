@@ -9,11 +9,11 @@
 	tools:ignore="MergeRootFrame" >
 
 	<RelativeLayout
-		android:id="@+id/RelativeLayout1"
+		android:id="@+id/title_container"
 		android:layout_width="match_parent"
+		android:gravity="center"
 		android:layout_height="0dp"
-		android:layout_weight="0.2"
-		android:gravity="center" >
+		android:layout_weight="0.2" >
 
 		<TextView
 			android:id="@+id/app_detail"

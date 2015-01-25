@@ -37,7 +37,7 @@
         </service>
         <activity
         	android:name="com.ilariosanseverino.apploud.ui.PlayPauseActivity"
-        	android:theme="@style/NoTitleDialog" />
+        	android:theme="@style/LightNoTitleDialog" />
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical"
 	android:weightSum="1"
-	tools:context="com.ilariosanseverino.apploud.AppDetailActivity"
+	tools:context="com.ilariosanseverino.apploud.AppDetailFragment"
 	tools:ignore="MergeRootFrame" >
 
 	<RelativeLayout
@@ -15,18 +15,20 @@
 		android:layout_height="0dp"
 		android:layout_weight="0.2" >
 
-		<FrameLayout
-			android:id="@+id/app_detail_container"
+		<TextView
+			android:id="@+id/app_detail"
+			style="?android:attr/textAppearanceLarge"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true" />
+			android:gravity="center"
+			android:textIsSelectable="true" />
 
 		<TextView
 			android:id="@+id/hint_text"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
-			android:layout_below="@+id/app_detail_container"
+			android:layout_below="@id/app_detail"
 			android:gravity="center_horizontal"
 			android:text="@string/detail_frag_role" />
 		

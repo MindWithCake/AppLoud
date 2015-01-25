@@ -3,6 +3,7 @@ package com.ilariosanseverino.apploud;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +42,7 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 		super.onCreate(savedInstanceState);
 		serviceIntent = new Intent(this, BackgroundService.class);
 		bindService(serviceIntent, connection, BIND_AUTO_CREATE);
+		Log.i("Details", "Chiamato bind service");
 		setContentView(R.layout.activity_app_detail);
 		
 		// Show the Up button in the action bar.
@@ -48,20 +50,20 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 
 		// For more information, see the Fragments API guide at:
 		// http://developer.android.com/guide/components/fragments.html
-		if(savedInstanceState == null){
-			Bundle arguments = new Bundle();
-			item = getIntent().getParcelableExtra(AppListActivity.ITEM_ARG);
-			arguments.putParcelable(AppListActivity.ITEM_ARG, item);
-			AppDetailFragment fragment = new AppDetailFragment();
-			fragment.setArguments(arguments);
-			getFragmentManager().beginTransaction().replace(
-					R.id.app_detail_container, fragment).commit();
-		}
+		if(savedInstanceState == null)
+			savedInstanceState = new Bundle();
+		
+		item = getIntent().getParcelableExtra(AppListActivity.ITEM_ARG);
+		savedInstanceState.putParcelable(AppListActivity.ITEM_ARG, item);
+		AppDetailFragment fragment = new AppDetailFragment();
+		fragment.setArguments(savedInstanceState);
+		getFragmentManager().beginTransaction().
+				replace(R.id.app_detail_container, fragment).commit();
 	}
 	
 	@Override
 	protected void onDestroy(){
-		if(connection != null)
+		if(binder != null)
 			unbindService(connection);
 		super.onDestroy();
 	}
