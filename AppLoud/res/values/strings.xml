@@ -33,4 +33,5 @@
 	<string name="status_off">disattivato</string>
 	<string name="status_summ">Il controllo del volume è:</string>
 	<string name="roto_label_descr">Rotazione Schermo</string>
+	<string name="gps_label_descr">GPS</string>
 </resources>

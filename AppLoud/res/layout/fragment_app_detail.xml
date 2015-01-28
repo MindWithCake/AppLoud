@@ -5,8 +5,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:divider="@drawable/grey_line"
-	android:orientation="vertical"
 	android:showDividers="middle"
+	android:orientation="vertical"
 	android:weightSum="1"
 	tools:context="com.ilariosanseverino.apploud.AppDetailFragment"
 	tools:ignore="MergeRootFrame" >
@@ -96,41 +96,52 @@
 			android:layout_height="wrap_content" />
 	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
 
-	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
-		android:id="@+id/roto_tuning"
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="0.16"
-		sanse:enabled="false"
-		sanse:popup_icon="@drawable/ic_menu_rotate"
-		sanse:popup_text="@string/roto_label_descr" >
+		android:orientation="horizontal"
+		android:weightSum="1"
+		android:divider="@drawable/grey_line"
+		android:showDividers="middle" >
 
-		<LinearLayout
-			android:id="@+id/roto_button_container"
-			android:layout_width="match_parent"
+		<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+			android:id="@+id/roto_tuning"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:orientation="horizontal" >
+			android:layout_weight="0.5"
+			sanse:enabled="false"
+			sanse:popup_icon="@drawable/ic_menu_rotate"
+			sanse:popup_text="@string/roto_label_descr" >
 
 			<ToggleButton
-				android:id="@+id/roto_on"
+				android:id="@+id/roto_toggle"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_margin="10dp"
-				android:drawableTop="@drawable/ic_action_screen_rotation"
+				android:drawableTop="@drawable/rotate_button_selector"
 				android:textOff=""
 				android:textOn=""
 				android:textSize="0sp" />
+		</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
+
+		<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+			android:id="@+id/gps_tuning"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.5"
+			sanse:enabled="false"
+			sanse:popup_icon="@drawable/ic_action_location_searching"
+			sanse:popup_text="@string/gps_label_descr" >
 
 			<ToggleButton
-				android:id="@+id/roto_off"
+				android:id="@+id/gps_toggle"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_margin="10dp"
-				android:drawableTop="@drawable/ic_action_screen_locked_to_portrait"
+				android:drawableTop="@drawable/gps_button_selector"
 				android:textOff=""
 				android:textOn=""
 				android:textSize="0sp" />
-		</LinearLayout>
-	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
+		</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
+	</LinearLayout>
 
 </LinearLayout>
