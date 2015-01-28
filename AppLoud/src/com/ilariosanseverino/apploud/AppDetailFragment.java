@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ilariosanseverino.apploud.ui.AppListItem;
+import com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning;
 
 /**
  * A fragment representing a single App detail screen. This fragment is either
@@ -51,13 +52,14 @@ public class AppDetailFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		AppDetailActivity act = (AppDetailActivity)getActivity();
+		AudioManager am = (AudioManager)act.getSystemService(Context.AUDIO_SERVICE);
+		View view = getView();
 		for(AudioSource src: AudioSource.values()){
-			View view = getView();
-			AppDetailActivity act = (AppDetailActivity)getActivity();
-			view.findViewById(src.checkId()).setOnClickListener(act);
-			SeekBar seekBar = (SeekBar)view.findViewById(src.seekId());
+			IgnorableTuning tun = (IgnorableTuning)view.findViewById(src.checkId());
+			tun.setOnActivationChangedListener(act);
+			SeekBar seekBar = (SeekBar)tun.findViewById(src.seekId());
 			seekBar.setOnSeekBarChangeListener(act);
-			AudioManager am = (AudioManager)act.getSystemService(Context.AUDIO_SERVICE);
 			seekBar.setMax(am.getStreamMaxVolume(src.audioStream()));
 		}
 	}

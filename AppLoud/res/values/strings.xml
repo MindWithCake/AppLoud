@@ -5,14 +5,14 @@
 <resources>
 	<string name="app_name">AppLoud</string>
 	<string name="title_app_detail">Dettagli App</string>
-	<string name="ring_icon_descr">Suoneria</string>
-	<string name="media_icon_descr">Multimedia</string>
-	<string name="notify_icon_descr">Notifiche</string>
-	<string name="sys_icon_descr">Sistema</string>
+	<string name="ring_icon_descr">Volume Suoneria</string>
+	<string name="media_icon_descr">Volume Musica</string>
+	<string name="notify_icon_descr">Volume Notifiche</string>
+	<string name="sys_icon_descr">Volume Sistema</string>
 	<string name="line_separator_descr">Separatore</string>
 	<string name="toggle_button">Ignora</string>
-	<string name="detail_frag_role">Imposta il volume desiderato, oppure seleziona \
-		"Ignora" per mantenere il volume inalterato</string>
+	<string name="detail_frag_role">Configura i parametri da modificare, \
+		disattiva quelli che vuoi mantenere inalterati</string>
 	<string name="setting_visual_feedback">Feedback visuale</string>
 	<string name="setting_visual_feedback_summ">Mostra la barra \
 		ogni volta che cambia il volume</string>
@@ -32,5 +32,5 @@
 	<string name="status_on">attivato</string>
 	<string name="status_off">disattivato</string>
 	<string name="status_summ">Il controllo del volume è:</string>
-	
+	<string name="roto_label_descr">Rotazione Schermo</string>
 </resources>

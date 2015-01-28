@@ -1,9 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:sanse="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/app_detail_external_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:divider="@drawable/grey_line"
 	android:orientation="vertical"
+	android:showDividers="middle"
 	android:weightSum="1"
 	tools:context="com.ilariosanseverino.apploud.AppDetailFragment"
 	tools:ignore="MergeRootFrame" >
@@ -11,9 +14,9 @@
 	<RelativeLayout
 		android:id="@+id/title_container"
 		android:layout_width="match_parent"
-		android:gravity="center"
 		android:layout_height="0dp"
-		android:layout_weight="0.2" >
+		android:layout_weight="0.2"
+		android:gravity="center" >
 
 		<TextView
 			android:id="@+id/app_detail"
@@ -33,152 +36,101 @@
 			android:text="@string/detail_frag_role" />
 	</RelativeLayout>
 
-	<RelativeLayout
+	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+		android:id="@+id/ring_tuning"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="0.2" >
-
-		<ImageView
-			android:id="@+id/ring_symbol"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:contentDescription="@string/ring_icon_descr"
-			android:src="@drawable/ic_action_ring_volume" />
-
-		<CheckBox
-			android:id="@+id/ring_check"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignBottom="@+id/ring_bar"
-			android:layout_alignParentRight="true"
-			android:text="@string/toggle_button" />
+		android:layout_weight="0.16"
+		sanse:enabled="false"
+		sanse:popup_icon="@drawable/ic_action_ring_volume"
+		sanse:popup_text="@string/ring_icon_descr" >
 
 		<SeekBar
 			android:id="@+id/ring_bar"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/ring_symbol"
-			android:layout_toLeftOf="@id/ring_check"
-			android:layout_toRightOf="@id/ring_symbol" />
-	</RelativeLayout>
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
 
-	<RelativeLayout
+	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+		android:id="@+id/media_tuning"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="0.2" >
-
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="1px"
-			android:layout_marginLeft="30dp"
-			android:layout_marginRight="30dp"
-			android:background="@color/light_gray" >
-		</FrameLayout>
-
-		<ImageView
-			android:id="@+id/media_symbol"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:contentDescription="@string/media_icon_descr"
-			android:src="@drawable/ic_action_volume_on" />
-
-		<CheckBox
-			android:id="@+id/media_check"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignBottom="@+id/media_bar"
-			android:layout_alignParentRight="true"
-			android:text="@string/toggle_button" />
+		android:layout_weight="0.16"
+		sanse:enabled="false"
+		sanse:popup_icon="@drawable/ic_action_volume_on"
+		sanse:popup_text="@string/media_icon_descr" >
 
 		<SeekBar
 			android:id="@+id/media_bar"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/media_symbol"
-			android:layout_toLeftOf="@id/media_check"
-			android:layout_toRightOf="@id/media_symbol" />
-	</RelativeLayout>
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
 
-	<RelativeLayout
+	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+		android:id="@+id/notify_tuning"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="0.2" >
-
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="1px"
-			android:layout_marginLeft="30dp"
-			android:layout_marginRight="30dp"
-			android:background="@color/light_gray" >
-		</FrameLayout>
-
-		<ImageView
-			android:id="@+id/notify_symbol"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:contentDescription="@string/notify_icon_descr"
-			android:src="@drawable/ic_action_chat" />
-
-		<CheckBox
-			android:id="@+id/notify_check"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_alignTop="@+id/notify_bar"
-			android:text="@string/toggle_button" />
+		android:layout_weight="0.16"
+		sanse:enabled="false"
+		sanse:popup_icon="@drawable/sym_action_chat"
+		sanse:popup_text="@string/notify_icon_descr" >
 
 		<SeekBar
 			android:id="@+id/notify_bar"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/notify_symbol"
-			android:layout_toLeftOf="@id/notify_check"
-			android:layout_toRightOf="@id/notify_symbol" />
-	</RelativeLayout>
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
 
-	<RelativeLayout
+	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+		android:id="@+id/sys_tuning"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="0.2" >
-
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="1px"
-			android:layout_marginLeft="30dp"
-			android:layout_marginRight="30dp"
-			android:background="@color/light_gray" >
-		</FrameLayout>
-
-		<ImageView
-			android:id="@+id/sys_symbol"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:contentDescription="@string/sys_icon_descr"
-			android:src="@drawable/ic_action_phone" />
-
-		<CheckBox
-			android:id="@+id/sys_check"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_alignTop="@+id/sys_bar"
-			android:text="@string/toggle_button" />
+		android:layout_weight="0.16"
+		sanse:enabled="false"
+		sanse:popup_icon="@drawable/ic_action_phone"
+		sanse:popup_text="@string/sys_icon_descr" >
 
 		<SeekBar
 			android:id="@+id/sys_bar"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/sys_symbol"
-			android:layout_toLeftOf="@id/sys_check"
-			android:layout_toRightOf="@id/sys_symbol" />
-	</RelativeLayout>
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
 
-</LinearLayout><!-- android:padding="16dp" -->
+	<com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning
+		android:id="@+id/roto_tuning"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="0.16"
+		sanse:enabled="false"
+		sanse:popup_icon="@drawable/ic_menu_rotate"
+		sanse:popup_text="@string/roto_label_descr" >
+
+		<LinearLayout
+			android:id="@+id/roto_button_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" >
+
+			<ToggleButton
+				android:id="@+id/roto_on"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:drawableTop="@drawable/ic_action_screen_rotation"
+				android:textOff=""
+				android:textOn=""
+				android:textSize="0sp" />
+
+			<ToggleButton
+				android:id="@+id/roto_off"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:drawableTop="@drawable/ic_action_screen_locked_to_portrait"
+				android:textOff=""
+				android:textOn=""
+				android:textSize="0sp" />
+		</LinearLayout>
+	</com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning>
+
+</LinearLayout>

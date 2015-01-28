@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="line" >
-    <stroke
-        android:width="12dp"
-        android:color="@color/light_gray" />
-</shape>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+	android:insetLeft="30dp"
+	android:insetRight="30dp" >
+
+	<shape android:shape="line" >
+		<stroke
+			android:width="1px"
+			android:color="@color/light_gray" />
+		
+		<size android:height="1dp" />
+	</shape>
+
+</inset>

@@ -5,5 +5,9 @@
     <color name="blue">#ff0000ff</color>
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
-    <color name="light_gray">#ffcccccc</color>
+    <color name="light_gray">#55cccccc</color>
+   <!--  <color name="sanse_enabled_background">#dd00ffff</color>
+    <color name="sanse_disabled_background">#3300ffff</color> -->
+    <color name="sanse_enabled_background">#1100ffff</color>
+    <color name="sanse_disabled_background">#11ff5500</color>
 </resources>

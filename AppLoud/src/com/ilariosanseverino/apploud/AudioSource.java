@@ -6,13 +6,13 @@ import com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry;
 
 public enum AudioSource{
 	RING (AudioManager.STREAM_RING, AppEntry.COLUMN_NAME_RING_STREAM,
-			R.id.ring_check, R.id.ring_bar),
+			R.id.ring_tuning, R.id.ring_bar),
 	MEDIA (AudioManager.STREAM_MUSIC, AppEntry.COLUMN_NAME_MUSIC_STREAM,
-			R.id.media_check, R.id.media_bar),
+			R.id.media_tuning, R.id.media_bar),
 	NOTIFY (AudioManager.STREAM_NOTIFICATION, AppEntry.COLUMN_NAME_NOTIFICATION_STREAM,
-			R.id.notify_check, R.id.notify_bar),
+			R.id.notify_tuning, R.id.notify_bar),
 	SYS (AudioManager.STREAM_SYSTEM, AppEntry.COLUMN_NAME_SYSTEM_STREAM,
-			R.id.sys_check, R.id.sys_bar);
+			R.id.sys_tuning, R.id.sys_bar);
 	
 	private final int audiostream, checkid, seekid;
 	private final String column;

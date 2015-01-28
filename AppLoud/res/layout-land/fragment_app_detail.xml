@@ -5,7 +5,7 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical"
 	android:weightSum="1"
-	tools:context="com.ilariosanseverino.apploud.AppDetailFragment"
+	tools:context="com.ilariosanseverino.apploud.AppDetailActivity"
 	tools:ignore="MergeRootFrame" >
 
 	<RelativeLayout
@@ -28,7 +28,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
-			android:layout_below="@id/app_detail"
+			android:layout_below="@+id/app_detail"
 			android:gravity="center_horizontal"
 			android:text="@string/detail_frag_role" />
 		

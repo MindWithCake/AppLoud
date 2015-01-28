@@ -6,15 +6,15 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.ui.AppListItem;
+import com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning;
+import com.ilariosanseverino.apploud.ui.widgets.OnActivationChangedListener;
 
-public class AppDetailActivity extends AppLoudMenuActivity implements OnClickListener, OnSeekBarChangeListener {
+public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarChangeListener, OnActivationChangedListener {
 	private Intent serviceIntent;
 	private AppListItem item;
 	
@@ -24,15 +24,16 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 		Integer[] volumes = binder.getStreamValues(item);
 		AudioSource[] src = AudioSource.values();
 		for(int i = 0; i < volumes.length; ++i){
-			CheckBox box = (CheckBox)act.findViewById(src[i].checkId());
+			IgnorableTuning tun = (IgnorableTuning)act.findViewById(src[i].checkId());
+			boolean barEnabled = true;
 			if(volumes[i] == null || volumes[i].intValue() < 0){
-				box.setChecked(true);
-				box.invalidate();
+				barEnabled = false;
 				volumes[i] = volumes[i] == null? 0 : -volumes[i];
 			}
+			tun.setEnabled(barEnabled);
 			SeekBar bar = (SeekBar)act.findViewById(src[i].seekId());
 			bar.setProgress(volumes[i]);
-			bar.setEnabled(!box.isChecked());
+			bar.setEnabled(barEnabled);
 			bar.invalidate();
 		}
 	}
@@ -79,16 +80,16 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnClickLis
 		}
 		return super.onOptionsItemSelected(menuItem);
 	}
-	
+
 	@Override
-	public void onClick(View v){
+	public void onActivationChanged(View v, boolean active){
 		if(binder == null)
 			return;
-		boolean shouldEnable = !((CheckBox)v).isChecked();
 		for(AudioSource src: AudioSource.values()){
 			if(v.getId() == src.checkId()){
-				findViewById(src.seekId()).setEnabled(shouldEnable);
-				binder.setStreamEnabled(item, src.columnName(), shouldEnable);
+				SeekBar bar = (SeekBar)v.findViewById(src.seekId());
+				bar.setEnabled(active);
+				binder.setStreamEnabled(item, src.columnName(), active);
 				return;
 			}
 		}
