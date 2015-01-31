@@ -113,7 +113,8 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		int id = child.getId();
 		if(id != R.id.pop_icon && id != R.id.check){
 			if(hasChild)
-				throw new IllegalArgumentException("ColorOptionsView accetta un solo figlio!");
+				throw new IllegalArgumentException("IgnorableTuning vuole un solo figlio!");
+			hasChild = true;
 			params = settableViewParams();
 		}
 		super.addView(child, params);
@@ -126,6 +127,8 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 			this.enabled = enabled;
 			changeBackground(enabled);
 		}
+		if(activationListener != null)
+			activationListener.onActivationChanged(this, enabled);
 	}
 	
 	public void setOnActivationChangedListener(OnActivationChangedListener listener){
@@ -171,7 +174,5 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 	@Override
 	public void onClick(View v){
 		setEnabled(!enabled);
-		if(activationListener != null)
-			activationListener.onActivationChanged(this, enabled);
 	}
 }

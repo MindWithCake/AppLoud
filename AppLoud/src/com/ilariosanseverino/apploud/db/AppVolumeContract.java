@@ -14,6 +14,8 @@ public final class AppVolumeContract {
 		public static final String COLUMN_NAME_NOTIFICATION_STREAM = "notification";
 		public static final String COLUMN_NAME_RING_STREAM = "ringtones";
 		public static final String COLUMN_NAME_SYSTEM_STREAM = "system";
+		public static final String COLUMN_NAME_ROTATION = "rotation";
+		public static final String COLUMN_NAME_GPS = "gps";
 		
 		public static final String COLUMN_TYPE_APPNAME = " TEXT NOT NULL";
 		public static final String COLUMN_TYPE_PACKAGE = COLUMN_TYPE_APPNAME;
@@ -21,5 +23,7 @@ public final class AppVolumeContract {
 		public static final String COLUMN_TYPE_MUSIC_STREAM = COLUMN_TYPE_RING_STREAM;
 		public static final String COLUMN_TYPE_NOTIFICATION_STREAM = COLUMN_TYPE_RING_STREAM;
 		public static final String COLUMN_TYPE_SYSTEM_STREAM = COLUMN_TYPE_RING_STREAM;
+		public static final String COLUMN_TYPE_ROTATION = " TEXT";
+		public static final String COLUMN_TYPE_GPS = COLUMN_TYPE_ROTATION;
 	}
 }

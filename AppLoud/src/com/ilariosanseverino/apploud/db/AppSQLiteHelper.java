@@ -14,7 +14,7 @@ import com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppSQLiteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 9;
 	public static final String DATABASE_NAME = "AppVolList.db";
 	
 	private static final String SQL_CREATE = "create table "+AppEntry.TABLE_NAME+
@@ -26,6 +26,8 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 			+AppEntry.COLUMN_TYPE_NOTIFICATION_STREAM+","+
 		AppEntry.COLUMN_NAME_RING_STREAM+AppEntry.COLUMN_TYPE_RING_STREAM+","+
 		AppEntry.COLUMN_NAME_SYSTEM_STREAM+AppEntry.COLUMN_TYPE_RING_STREAM+","+
+		AppEntry.COLUMN_NAME_ROTATION+AppEntry.COLUMN_TYPE_ROTATION+","+
+		AppEntry.COLUMN_NAME_GPS+AppEntry.COLUMN_TYPE_GPS+","+
 		" UNIQUE("+AppEntry.COLUMN_NAME_APPNAME+", "+AppEntry.COLUMN_NAME_PACKAGE+"))";
 	
     private final int STREAMS_NUMBER = AudioSource.values().length;
@@ -42,8 +44,19 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-		db.execSQL("DROP TABLE IF EXISTS " + AppEntry.TABLE_NAME);
-		onCreate(db);
+		if(oldVersion < 8){
+			db.execSQL("ALTER TABLE "+AppEntry.TABLE_NAME+" ADD COLUMN "+
+					AppEntry.COLUMN_NAME_ROTATION+AppEntry.COLUMN_TYPE_ROTATION+" DEFAULT 0");
+			db.execSQL("ALTER TABLE "+AppEntry.TABLE_NAME+" ADD COLUMN "+
+					AppEntry.COLUMN_NAME_GPS+AppEntry.COLUMN_TYPE_GPS+" DEFAULT 0");
+		}
+		else if(oldVersion < 9){
+			//TODO probabilmente va bene così
+		}
+		else{
+			db.execSQL("DROP TABLE IF EXISTS " + AppEntry.TABLE_NAME);
+			onCreate(db);
+		}
 	}
 	
 	public ArrayList<AppListItem> toAppList(SQLiteDatabase db){

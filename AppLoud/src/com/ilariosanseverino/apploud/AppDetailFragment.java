@@ -62,5 +62,9 @@ public class AppDetailFragment extends Fragment {
 			seekBar.setOnSeekBarChangeListener(act);
 			seekBar.setMax(am.getStreamMaxVolume(src.audioStream()));
 		}
+		for(int i: new int[]{R.id.roto_tuning, R.id.gps_tuning}){
+			IgnorableTuning tun = (IgnorableTuning)view.findViewById(i);
+			tun.setOnActivationChangedListener(act.new ToggleButtonActivator());
+		}
 	}
 }

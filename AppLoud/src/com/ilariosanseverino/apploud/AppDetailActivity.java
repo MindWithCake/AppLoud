@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.ToggleButton;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.ui.AppListItem;
@@ -33,7 +34,6 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 			tun.setEnabled(barEnabled);
 			SeekBar bar = (SeekBar)act.findViewById(src[i].seekId());
 			bar.setProgress(volumes[i]);
-			bar.setEnabled(barEnabled);
 			bar.invalidate();
 		}
 	}
@@ -83,13 +83,12 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 
 	@Override
 	public void onActivationChanged(View v, boolean active){
-		if(binder == null)
-			return;
 		for(AudioSource src: AudioSource.values()){
 			if(v.getId() == src.checkId()){
 				SeekBar bar = (SeekBar)v.findViewById(src.seekId());
 				bar.setEnabled(active);
-				binder.setStreamEnabled(item, src.columnName(), active);
+				if(binder != null)
+					binder.setStreamEnabled(item, src.columnName(), active);
 				return;
 			}
 		}
@@ -113,5 +112,25 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 	@Override
 	protected int getContainerID(){
 		return R.id.app_detail_container;
+	}
+	
+	protected class ToggleButtonActivator implements OnActivationChangedListener{
+		public void onActivationChanged(View v, boolean active){
+			ToggleButton tbut;
+			switch(v.getId()){
+			case R.id.roto_tuning:
+				tbut = (ToggleButton)v.findViewById(R.id.roto_toggle);
+				tbut.setActivated(active);
+				tbut.setClickable(active);
+				//TODO attiva/disattiva rotazione
+				break;
+			case R.id.gps_tuning:
+				tbut = (ToggleButton)v.findViewById(R.id.gps_toggle);
+				tbut.setActivated(active);
+				tbut.setClickable(active);
+				//TODO attiva/disattiva rotazione
+				break;
+			}
+		}
 	}
 }

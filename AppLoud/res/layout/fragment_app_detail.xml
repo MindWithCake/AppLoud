@@ -111,7 +111,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="0.5"
 			sanse:enabled="false"
-			sanse:popup_icon="@drawable/ic_menu_rotate"
+			sanse:popup_icon="@drawable/ic_action_rotate_right"
 			sanse:popup_text="@string/roto_label_descr" >
 
 			<ToggleButton

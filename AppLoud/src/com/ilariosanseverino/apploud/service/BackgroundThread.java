@@ -77,8 +77,7 @@ public class BackgroundThread extends Thread {
 	
 	private String getAppName(String pkg){
 		try{
-			PackageInfo pkgInfo = owner.packageManager.getPackageInfo(pkg, 0);
-			return appNameFromPkgInfo(pkgInfo);
+			return appNameFromPkgInfo(owner.packageManager.getPackageInfo(pkg, 0));
 		}
 		catch(NameNotFoundException e){
 			return null;
