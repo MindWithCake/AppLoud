@@ -19,11 +19,11 @@ public class FillerThread extends Thread {
 	public final static String DB_FILLED_EVENT = "fillerthread-db-full";
 	
 	public FillerThread(Context ctx, AppSQLiteHelper helper, 
-			SQLiteDatabase db, PackageManager pm){
+			SQLiteDatabase db){
 		this.helper = helper;
 		this.db = db;
-		this.pm = pm;
 		this.ctx = ctx;
+		this.pm = ctx.getPackageManager();
 	}
 	
 	@Override

@@ -1,12 +1,10 @@
 package com.ilariosanseverino.apploud.service;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.IBinder;
@@ -17,9 +15,7 @@ import com.ilariosanseverino.apploud.db.AppSQLiteHelper;
 
 public class BackgroundService extends AppLoudPreferenceListenerService {
 	public final static String THREAD_PREF_KEY = "pref_thread_status";
-	protected PackageManager packageManager;
-	protected ActivityManager activityManager;
-	protected AudioManager audioManager;
+	private AudioManager audioManager;
 	protected boolean threadRunning = false;
 	
 	private IBinder binder;
@@ -35,8 +31,6 @@ public class BackgroundService extends AppLoudPreferenceListenerService {
 		helper = new AppSQLiteHelper(this);
 		binder = new AppLoudBinder(this);
 		db = helper.getWritableDatabase();
-		packageManager = getPackageManager();
-		activityManager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		registerReceiver(recv, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 	}
@@ -60,7 +54,7 @@ public class BackgroundService extends AppLoudPreferenceListenerService {
 				getDefaultSharedPreferences(this.getApplicationContext());
 		threadShouldRun = pref.getBoolean(THREAD_PREF_KEY, true);
 		decideFlags(pref);
-		new FillerThread(this, helper, db, packageManager).start();
+		new FillerThread(this, helper, db).start();
 		thread = new BackgroundThread(this);
 		changeThreadStatus();
 		return START_STICKY;
@@ -84,6 +78,7 @@ public class BackgroundService extends AppLoudPreferenceListenerService {
 	
 	private class RingerModeReceiver extends BroadcastReceiver{
 		public void onReceive(Context context, Intent intent){
+			Log.i("Svc", "Ricevuto cambio di ringer mode");
 			changeThreadStatus();
 		}
 	}

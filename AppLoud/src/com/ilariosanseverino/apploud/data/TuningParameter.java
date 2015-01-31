@@ -2,10 +2,10 @@ package com.ilariosanseverino.apploud.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public abstract class TuningParameter {
-	protected String value;
+	private String value;
 	protected final String originalValueKey;
 	
 	public TuningParameter(String key, String value){
@@ -16,12 +16,20 @@ public abstract class TuningParameter {
 	public final void applyTuning(Context ctx){
 		SharedPreferences pref = ctx.getSharedPreferences(
 				"original_values", Context.MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putString(originalValueKey, getActualValue(ctx));
-		if(doApplyTuning(ctx, value))
-			editor.apply();
-		else if(pref.contains(originalValueKey))
+		String backup = getActualValue(ctx);
+		Log.i("Tuning-"+originalValueKey, "Salvato actual value: "+backup);
+		
+		if(doApplyTuning(ctx, value)){
+			Log.i("Tuning-"+originalValueKey, "Parametro applicato "+value);
+			pref.edit().putString(originalValueKey, backup).apply();
+		}
+		else if(pref.contains(originalValueKey)){
+			Log.i("Tuning-"+originalValueKey, "Ho un valore salvato");
 			doApplyTuning(ctx, pref.getString(originalValueKey, null));
+			pref.edit().remove(originalValueKey).apply();
+		}
+		else
+			Log.i("Tuning-"+originalValueKey, "Niente da applicare e niente da ripristinare");
 	}
 
 	protected abstract boolean doApplyTuning(Context ctx, String val);
