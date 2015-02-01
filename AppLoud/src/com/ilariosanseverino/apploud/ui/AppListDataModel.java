@@ -18,4 +18,9 @@ public class AppListDataModel {
 	public void refreshAppList(IBackgroundServiceBinder binder){
 		appList = binder != null? binder.getAppList() : new ArrayList<AppListItem>();
 	}
+	
+	public ArrayList<AppListItem> getFilteredAppList(String regex){
+		//TODO
+		return null;
+	}
 }

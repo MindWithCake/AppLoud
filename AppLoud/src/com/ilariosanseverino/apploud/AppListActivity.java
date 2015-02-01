@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
@@ -47,7 +46,6 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 			setContentView(R.layout.activity_app_list);
 
 			if(findViewById(R.id.app_detail_container) != null){
-				Log.i("AppList", "Riciclo frammento");
 				mTwoPane = true;
 				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).setActivateOnItemClick(true);
 
@@ -68,10 +66,13 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 				Bundle arguments = new Bundle();
 				arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
 				listFrag.setArguments(arguments);
-				fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
 			}
+			fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
+				
 			unbindService(connection);
-			progr.dismiss();
+			
+			if(progr.isShowing())
+				progr.dismiss();
 		}
 	};
 	
@@ -81,14 +82,18 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		Intent serviceIntent = new Intent(this, BackgroundService.class);
+		
+		if(savedInstanceState == null){
 		LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
 				new IntentFilter(FillerThread.DB_FILLED_EVENT));
-		Intent serviceIntent = new Intent(this, BackgroundService.class);
 		startService(serviceIntent);
-		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT|BIND_AUTO_CREATE);
 		progr = ProgressDialog.show(this,
 				getResources().getString(R.string.progress_load_title),
 				getResources().getString(R.string.progress_load_summ));
+		}
+		
+		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT);
 	}
 	
 	@Override

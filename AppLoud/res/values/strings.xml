@@ -34,4 +34,6 @@
 	<string name="status_summ">Il controllo del volume è:</string>
 	<string name="roto_label_descr">Rotazione Schermo</string>
 	<string name="gps_label_descr">GPS</string>
+	<string name="search_menu_title">Cerca</string>
+	<string name="search_hint">Cerca nella lista</string>
 </resources>

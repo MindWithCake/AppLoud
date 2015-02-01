@@ -17,7 +17,7 @@ import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppSQLiteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 13;
 	public static final String DATABASE_NAME = "AppVolList.db";
 	
 	private static final String creationString(String tablename){
@@ -49,15 +49,20 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 		if(oldVersion < 8){
 			db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+
-					COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+" DEFAULT OFF");
+					COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+" DEFAULT NULL");
 			db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+
-					COLUMN_NAME_GPS+COLUMN_TYPE_GPS+" DEFAULT OFF");
+					COLUMN_NAME_GPS+COLUMN_TYPE_GPS+" DEFAULT NULL");
 		}
 		else if(oldVersion < 11){
 			db.execSQL(creationString("temptable"));
 			db.execSQL("INSERT INTO temptable SELECT * FROM "+TABLE_NAME);
 			db.execSQL("DROP TABLE "+TABLE_NAME);
 			db.execSQL("ALTER TABLE temptable RENAME TO "+TABLE_NAME);
+			onUpgrade(db, 11, 12);
+		}
+		else if(oldVersion < 13){
+			db.execSQL("UPDATE "+TABLE_NAME+
+					" SET "+COLUMN_NAME_ROTATION+"=NULL");
 		}
 		else{
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);

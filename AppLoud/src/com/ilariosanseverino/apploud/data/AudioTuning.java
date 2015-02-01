@@ -30,11 +30,12 @@ public class AudioTuning extends TuningParameter {
 
 	@Override
 	protected boolean doApplyTuning(Context ctx, String val){
-		if(!isEnabled(val))
+		AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
+		
+		if(am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL || !isEnabled(val))
 			return false;
 		
 		int intValue = Integer.parseInt(val);
-		AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
 		am.setStreamVolume(stream, intValue, flags(ctx));
 		return true;
 	}
