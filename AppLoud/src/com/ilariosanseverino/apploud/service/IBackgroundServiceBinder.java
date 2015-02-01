@@ -10,7 +10,7 @@ public interface IBackgroundServiceBinder {
 	
 	public ArrayList<AppListItem> getAppList();
 	
-	public void updateStream(AppListItem item, String streamName, int newValue);
+//	public void updateStream(AppListItem item, String streamName, int newValue);
 	
 	public void setParam(AppListItem item, String column, String value);
 	

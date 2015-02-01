@@ -5,18 +5,44 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.ToggleButton;
 
+import com.ilariosanseverino.apploud.data.TuningControl;
 import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 import com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning;
 
-public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarChangeListener {
+import static com.ilariosanseverino.apploud.data.TuningControl.*;
+
+public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarChangeListener, OnCheckedChangeListener {
 	private Intent serviceIntent;
 	private AppListItem item;
 	private AppDetailActivator activator;
+	
+	private void initTuner(IgnorableTuning t, TuningParameter p){
+		View v = t.findViewById(p.ctrl.customViewId);
+		switch(p.ctrl){
+		case RINGER: case NOTY: case MUSIC: case SYS:
+			int prog = 0;
+			if(p.getValue() != null)
+				prog = Integer.parseInt(p.getValue());
+			((SeekBar)v).setProgress(prog);
+			((SeekBar)v).setOnSeekBarChangeListener(this);
+			break;
+		case ROTO: case GPS:
+			((ToggleButton)v).setChecked("ON".equals(p.getValue()));
+			((ToggleButton)v).setOnCheckedChangeListener(this);
+			break;
+		default:
+			throw new IllegalArgumentException("Tuning sconosciuto: "+p.ctrl.column);
+		}
+	}
 	
 	@Override
 	public void doOnServiceConnected(){
@@ -25,6 +51,7 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		TuningParameter[] params = binder.getAppValues(item);
 		for(TuningParameter p: params){
 			IgnorableTuning tun = (IgnorableTuning)act.findViewById(p.ctrl.widgetId);
+			initTuner(tun, p);
 			tun.setOnActivationChangedListener(activator);
 			tun.setEnabled(p.isParameterEnabled());
 		}
@@ -72,26 +99,14 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		return super.onOptionsItemSelected(menuItem);
 	}
 
-//	@Override
-//	public void onActivationChanged(View v, boolean active){
-//		for(AudioSource src: AudioSource.values()){
-//			if(v.getId() == src.checkId()){
-//				SeekBar bar = (SeekBar)v.findViewById(src.seekId());
-//				bar.setEnabled(active);
-//				if(binder != null)
-//					binder.setStreamEnabled(item, src.columnName(), active);
-//				return;
-//			}
-//		}
-//	}
-
 	@Override
 	public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser){
+		Log.i("DetailAct", "Progress changed: "+progress+" "+fromUser);
 		if(binder == null || !fromUser)
 			return;
-		for(AudioSource src: AudioSource.values()){
-			if(src.seekId() == seekBar.getId()){
-				binder.updateStream(item, src.columnName(), progress);
+		for(TuningControl ctrl: TuningControl.values()){
+			if(ctrl.customViewId == seekBar.getId()){
+				binder.setParam(item, ctrl.column, Integer.toString(progress));
 				return;
 			}
 		}
@@ -104,24 +119,14 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 	protected int getContainerID(){
 		return R.id.app_detail_container;
 	}
-	
-//	protected class ToggleButtonActivator implements OnActivationChangedListener{
-//		public void onActivationChanged(View v, boolean active){
-//			ToggleButton tbut;
-//			switch(v.getId()){
-//			case R.id.roto_tuning:
-//				tbut = (ToggleButton)v.findViewById(R.id.roto_toggle);
-//				tbut.setActivated(active);
-//				tbut.setClickable(active);
-//				//TODO attiva/disattiva rotazione
-//				break;
-//			case R.id.gps_tuning:
-//				tbut = (ToggleButton)v.findViewById(R.id.gps_toggle);
-//				tbut.setActivated(active);
-//				tbut.setClickable(active);
-//				//TODO attiva/disattiva rotazione
-//				break;
-//			}
-//		}
-//	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+		if(buttonView.getId() == ROTO.customViewId)
+			binder.setParam(item, ROTO.column, isChecked? "ON" : "OFF");
+		else if(buttonView.getId() == GPS.customViewId)
+			Log.e("DetailAct", "Premuto bottone GPS!");
+		else
+			throw new IllegalArgumentException("Bottone misterioso checkato: "+buttonView.getId());
+	}
 }

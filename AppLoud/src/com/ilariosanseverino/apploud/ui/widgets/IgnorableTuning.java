@@ -122,6 +122,7 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 	
 	@Override
 	public void setEnabled(boolean enabled){
+		super.setEnabled(enabled);
 		if(enabled != this.enabled){
 			this.enabled = enabled;
 			changeBackground(enabled);

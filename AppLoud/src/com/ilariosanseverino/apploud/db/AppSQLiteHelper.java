@@ -17,20 +17,22 @@ import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppSQLiteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 	public static final String DATABASE_NAME = "AppVolList.db";
 	
-	private static final String SQL_CREATE = "create table "+TABLE_NAME+
-		" (" +_ID + " INTEGER PRIMARY KEY," +
-		COLUMN_NAME_APPNAME+COLUMN_TYPE_APPNAME+","+
-		COLUMN_NAME_PACKAGE+COLUMN_TYPE_PACKAGE+","+
-		COLUMN_NAME_MUSIC_STREAM+COLUMN_TYPE_MUSIC_STREAM+","+
-		COLUMN_NAME_NOTIFICATION_STREAM+COLUMN_TYPE_NOTIFICATION_STREAM+","+
-		COLUMN_NAME_RING_STREAM+COLUMN_TYPE_RING_STREAM+","+
-		COLUMN_NAME_SYSTEM_STREAM+COLUMN_TYPE_RING_STREAM+","+
-		COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+","+
-		COLUMN_NAME_GPS+COLUMN_TYPE_GPS+","+
-		" UNIQUE("+COLUMN_NAME_APPNAME+", "+COLUMN_NAME_PACKAGE+"))";
+	private static final String creationString(String tablename){
+		return "create table "+tablename+
+				" (" +_ID + " INTEGER PRIMARY KEY," +
+				COLUMN_NAME_APPNAME+COLUMN_TYPE_APPNAME+","+
+				COLUMN_NAME_PACKAGE+COLUMN_TYPE_PACKAGE+","+
+				COLUMN_NAME_MUSIC_STREAM+COLUMN_TYPE_MUSIC_STREAM+","+
+				COLUMN_NAME_NOTIFICATION_STREAM+COLUMN_TYPE_NOTIFICATION_STREAM+","+
+				COLUMN_NAME_RING_STREAM+COLUMN_TYPE_RING_STREAM+","+
+				COLUMN_NAME_SYSTEM_STREAM+COLUMN_TYPE_RING_STREAM+","+
+				COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+","+
+				COLUMN_NAME_GPS+COLUMN_TYPE_GPS+","+
+				" UNIQUE("+COLUMN_NAME_APPNAME+", "+COLUMN_NAME_PACKAGE+"))";
+	}
 	
     private final String SELECT_APP = COLUMN_NAME_APPNAME+"=? AND "+COLUMN_NAME_PACKAGE+"=?";
 
@@ -40,19 +42,22 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db){
-        db.execSQL(SQL_CREATE);
+        db.execSQL(creationString(TABLE_NAME));
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 		if(oldVersion < 8){
 			db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+
-					COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+" DEFAULT 0");
+					COLUMN_NAME_ROTATION+COLUMN_TYPE_ROTATION+" DEFAULT OFF");
 			db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+
-					COLUMN_NAME_GPS+COLUMN_TYPE_GPS+" DEFAULT 0");
+					COLUMN_NAME_GPS+COLUMN_TYPE_GPS+" DEFAULT OFF");
 		}
-		else if(oldVersion < 10){
-			//TODO probabilmente va bene così
+		else if(oldVersion < 11){
+			db.execSQL(creationString("temptable"));
+			db.execSQL("INSERT INTO temptable SELECT * FROM "+TABLE_NAME);
+			db.execSQL("DROP TABLE "+TABLE_NAME);
+			db.execSQL("ALTER TABLE temptable RENAME TO "+TABLE_NAME);
 		}
 		else{
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -81,17 +86,8 @@ public class AppSQLiteHelper extends SQLiteOpenHelper {
 		db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
 	}
 	
-	public void updateVolume(SQLiteDatabase db, String appName, String appPkg, String stream, Integer volume){
-		Log.i("Helper", "Aggiornato volume");
-		ContentValues cv = new ContentValues();
-		if(volume != null)
-			cv.put(stream, volume);
-		else
-			cv.putNull(stream);
-		db.update(TABLE_NAME, cv, SELECT_APP, new String[]{appName, appPkg});
-	}
-	
 	public void setColumn(SQLiteDatabase db, String appName, String appPkg, String column, String value){
+		Log.i("Helper", "Salvo valore "+value+" nella colonna "+column);
 		ContentValues cv = new ContentValues();
 		if(value != null)
 			cv.put(column, value);

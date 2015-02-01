@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
@@ -28,9 +29,9 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 		return service.helper.toAppList(service.db);
 	}
 
-	public void updateStream(AppListItem item, String streamName, int newValue){
-		service.helper.updateVolume(service.db, item.appName(), item.appPkg(), streamName, newValue);
-	}
+//	public void updateStream(AppListItem item, String streamName, int newValue){
+//		service.helper.updateVolume(service.db, item.appName(), item.appPkg(), streamName, newValue);
+//	}
 
 	public TuningParameter[] getAppValues(AppListItem item){
 		return service.helper.getParameters(service.db, item.appName(), item.appPkg());
@@ -45,6 +46,7 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 	}
 
 	public void setParam(AppListItem item, String column, String value){
+		Log.i("Binder", "Setto parametro "+column+" al valore "+value);
 		service.helper.setColumn(service.db, item.appName(), item.appPkg(), column, value);
 	}
 }

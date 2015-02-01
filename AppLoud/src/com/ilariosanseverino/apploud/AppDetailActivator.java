@@ -6,6 +6,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.ilariosanseverino.apploud.data.TuningControl;
+import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 import com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning;
@@ -16,10 +17,12 @@ public class AppDetailActivator implements OnActivationChangedListener {
 	private final IBackgroundServiceBinder binder;
 	private final AppListItem item;
 	private View custom = null;
+	TuningParameter[] params;
 	
 	public AppDetailActivator(IBackgroundServiceBinder binder, AppListItem item){
 		this.binder = binder;
 		this.item = item;
+		params = binder.getAppValues(item);
 	}
 
 	@Override
