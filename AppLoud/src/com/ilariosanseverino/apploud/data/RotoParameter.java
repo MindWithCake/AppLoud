@@ -1,15 +1,16 @@
 package com.ilariosanseverino.apploud.data;
 
+import static android.provider.Settings.System.*;
+import static com.ilariosanseverino.apploud.data.TuningControl.*;
 import android.content.Context;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
-
-import static android.provider.Settings.System.ACCELEROMETER_ROTATION;
+import android.util.Log;
 
 public class RotoParameter extends TuningParameter {
 	
 	public RotoParameter(String value){
-		super("Rotation_value", value);
+		super(ROTO, value);
 	}
 
 	@Override
@@ -22,6 +23,7 @@ public class RotoParameter extends TuningParameter {
 		case "ON": active = 1; //DON'T BREAK!!!
 		case "OFF":
 			Settings.System.putInt(ctx.getContentResolver(), ACCELEROMETER_ROTATION, active);
+			Log.i("Roto", "Rotazione applicata: "+value+" con valore "+active);
 			return true;
 		default:
 			return false;
@@ -37,5 +39,10 @@ public class RotoParameter extends TuningParameter {
 		catch(SettingNotFoundException e){
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isParameterEnabled(){
+		return getValue() != null;
 	}
 }

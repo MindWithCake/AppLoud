@@ -120,8 +120,7 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		super.addView(child, params);
 	}
 	
-	//------------------ Public methods ----------------------
-	
+	@Override
 	public void setEnabled(boolean enabled){
 		if(enabled != this.enabled){
 			this.enabled = enabled;
@@ -130,6 +129,8 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		if(activationListener != null)
 			activationListener.onActivationChanged(this, enabled);
 	}
+	
+	//------------------ Public methods ----------------------
 	
 	public void setOnActivationChangedListener(OnActivationChangedListener listener){
 		activationListener = listener;

@@ -19,7 +19,7 @@ public final class AppVolumeContract {
 		
 		public static final String COLUMN_TYPE_APPNAME = " TEXT NOT NULL";
 		public static final String COLUMN_TYPE_PACKAGE = COLUMN_TYPE_APPNAME;
-		public static final String COLUMN_TYPE_RING_STREAM = " INTEGER";
+		public static final String COLUMN_TYPE_RING_STREAM = " TEXT";
 		public static final String COLUMN_TYPE_MUSIC_STREAM = COLUMN_TYPE_RING_STREAM;
 		public static final String COLUMN_TYPE_NOTIFICATION_STREAM = COLUMN_TYPE_RING_STREAM;
 		public static final String COLUMN_TYPE_SYSTEM_STREAM = COLUMN_TYPE_RING_STREAM;

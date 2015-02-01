@@ -2,6 +2,7 @@ package com.ilariosanseverino.apploud.service;
 
 import java.util.ArrayList;
 
+import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public interface IBackgroundServiceBinder {
@@ -11,9 +12,9 @@ public interface IBackgroundServiceBinder {
 	
 	public void updateStream(AppListItem item, String streamName, int newValue);
 	
-	public void setStreamEnabled(AppListItem item, String streamName, boolean enabled);
+	public void setParam(AppListItem item, String column, String value);
 	
-	public Integer[] getStreamValues(AppListItem item);
+	public TuningParameter[] getAppValues(AppListItem item);
 	
 	public boolean changeThreadActiveStatus();
 }

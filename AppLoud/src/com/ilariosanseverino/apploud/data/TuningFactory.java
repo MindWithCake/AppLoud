@@ -17,6 +17,8 @@ public class TuningFactory {
 			return AudioTuning.AudioTuningFactory.makeTuning(source, value);
 		case COLUMN_NAME_ROTATION:
 			return new RotoParameter(value);
+		case COLUMN_NAME_GPS:
+			return new GpsParameter(value);
 		default:
 			return null;
 		}

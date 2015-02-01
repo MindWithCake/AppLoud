@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.preference.PreferenceManager;
 
+import com.ilariosanseverino.apploud.data.TuningParameter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
 
 public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
@@ -31,12 +32,8 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 		service.helper.updateVolume(service.db, item.appName(), item.appPkg(), streamName, newValue);
 	}
 
-	public void setStreamEnabled(AppListItem item, String stream, boolean enabled){
-		service.helper.setStreamEnabled(service.db, item.appName(), item.appPkg(), stream, enabled);
-	}
-
-	public Integer[] getStreamValues(AppListItem item){
-		return service.helper.getStreams(service.db, item.appName(), item.appPkg());
+	public TuningParameter[] getAppValues(AppListItem item){
+		return service.helper.getParameters(service.db, item.appName(), item.appPkg());
 	}
 	
 	public boolean changeThreadActiveStatus(){
@@ -45,5 +42,9 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 		prefEdit.putBoolean(BackgroundService.THREAD_PREF_KEY, service.threadShouldRun);
 		prefEdit.commit();
 		return service.threadShouldRun;
+	}
+
+	public void setParam(AppListItem item, String column, String value){
+		service.helper.setColumn(service.db, item.appName(), item.appPkg(), column, value);
 	}
 }
