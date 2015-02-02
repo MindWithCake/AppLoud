@@ -41,7 +41,7 @@ public class AppListItem implements Parcelable {
 	}
 	
 	public String toString(){
-		return apppkg+"."+appname;
+		return appname+" ("+apppkg+")";
 	}
 
 	@Override

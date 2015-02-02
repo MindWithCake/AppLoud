@@ -1,7 +1,10 @@
 package com.ilariosanseverino.apploud;
 
+import java.util.ArrayList;
+
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,11 +40,15 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	public final static String LIST_FRAG_TAG = "List";
 	public final static String ITEM_ARG = "appItem";
 	public final static String LIST_ARG = "apps";
+	private String searchString = null;
 	
 	private final BroadcastReceiver dbReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			dataModel = new AppListDataModel(binder);
+			if(searchString != null)
+				dataModel.getFilteredAppList(AppListActivity.this, searchString);
+			
 			FragmentManager fragmentManager = getFragmentManager();
 			setContentView(R.layout.activity_app_list);
 
@@ -60,14 +67,15 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 				}
 			}
 
-			AppListFragment listFrag = (AppListFragment)fragmentManager.findFragmentByTag(LIST_FRAG_TAG);
-			if(listFrag == null){
-				listFrag = new AppListFragment();
-				Bundle arguments = new Bundle();
-				arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
-				listFrag.setArguments(arguments);
-			}
-			fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
+			showFragment((AppListFragment)fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
+					dataModel.getAppList());
+//			if(listFrag == null){
+//				listFrag = new AppListFragment();
+//				Bundle arguments = new Bundle();
+//				arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
+//				listFrag.setArguments(arguments);
+//			}
+//			fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
 				
 			unbindService(connection);
 			
@@ -76,24 +84,45 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 		}
 	};
 	
+	private void showFragment(AppListFragment recycleFrag, ArrayList<AppListItem> content){
+		FragmentManager fragmentManager = getFragmentManager();
+		if(recycleFrag == null){
+			recycleFrag = new AppListFragment();
+			Bundle arguments = new Bundle();
+			arguments.putParcelableArrayList(LIST_ARG, content);
+			recycleFrag.setArguments(arguments);
+		}
+		fragmentManager.beginTransaction().replace(R.id.app_list, recycleFrag, LIST_FRAG_TAG).commit();
+	}
+	
+	public void showFilteredResult(ArrayList<AppListItem> items){
+		showFragment(null, items);
+		searchString = null;
+	}
+	
 	@Override
 	protected void doOnServiceConnected(){}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		Intent serviceIntent = new Intent(this, BackgroundService.class);
+		
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+			searchString = intent.getStringExtra(SearchManager.QUERY);
+		 
+		intent = new Intent(this, BackgroundService.class);
 		
 		if(savedInstanceState == null){
 		LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
 				new IntentFilter(FillerThread.DB_FILLED_EVENT));
-		startService(serviceIntent);
+		startService(intent);
 		progr = ProgressDialog.show(this,
 				getResources().getString(R.string.progress_load_title),
 				getResources().getString(R.string.progress_load_summ));
 		}
 		
-		bindService(serviceIntent, connection, BIND_ABOVE_CLIENT);
+		bindService(intent, connection, BIND_ABOVE_CLIENT);
 	}
 	
 	@Override

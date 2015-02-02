@@ -1,11 +1,14 @@
 package com.ilariosanseverino.apploud;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import com.ilariosanseverino.apploud.service.BackgroundConnection;
 import com.ilariosanseverino.apploud.service.BackgroundService;
@@ -52,6 +55,12 @@ public abstract class AppLoudMenuActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
+		
+		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    searchView.setIconifiedByDefault(false);
+	    
 		playPauseIntent = new Intent(this, PlayPauseActivity.class);
 		return super.onCreateOptionsMenu(menu);
 	}

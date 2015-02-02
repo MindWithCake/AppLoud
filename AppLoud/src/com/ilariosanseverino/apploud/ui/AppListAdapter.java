@@ -66,9 +66,32 @@ public class AppListAdapter extends ArrayAdapter<AppListItem> {
 		return convertView;
 	}
 	
+//	@Override
+//	public Filter getFilter(){
+//		// TODO
+//		return null;
+//	}
+	
 	static class AppRowViewHolder {
 		TextView appText;
 		TextView packageText;
 		ImageView icon;
 	}
+	
+//	private class AppListFilter extends Filter{
+//
+//		@Override
+//		protected FilterResults performFiltering(CharSequence constraint){
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//
+//		@Override
+//		protected void publishResults(CharSequence constraint,
+//				FilterResults results){
+//			// TODO Auto-generated method stub
+//			
+//		}
+//		
+//	}
 }

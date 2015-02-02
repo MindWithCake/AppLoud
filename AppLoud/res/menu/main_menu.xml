@@ -3,13 +3,14 @@
 	
 	<item android:id="@+id/action_search"
 		android:title="@string/search_menu_title"
-		android:menuCategory="system"
+		android:menuCategory="alternative"
 		android:icon="@drawable/ic_action_search"
-		android:showAsAction="always" />
+		android:showAsAction="always|collapseActionView"
+		android:actionViewClass="android.widget.SearchView" />
 	
 	<item android:id="@+id/action_start_svc"
 		android:title="@string/start_menu_title"
-		android:menuCategory="alternative"
+		android:menuCategory="system"
 		android:icon="@drawable/ic_action_play"
 		android:showAsAction="ifRoom" />
 	
