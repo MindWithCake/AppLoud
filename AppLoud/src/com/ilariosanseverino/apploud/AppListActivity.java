@@ -2,6 +2,7 @@ package com.ilariosanseverino.apploud;
 
 import java.util.ArrayList;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -54,29 +55,25 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 
 			if(findViewById(R.id.app_detail_container) != null){
 				mTwoPane = true;
-				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).setActivateOnItemClick(true);
+				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).
+						setActivateOnItemClick(true);
 
-				AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.findFragmentByTag(DETAIL_FRAG_TAG);
+				AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.
+						findFragmentByTag(DETAIL_FRAG_TAG);
 				if (detFrag == null) {
 					detFrag = new AppDetailFragment();
 					Bundle args = new Bundle();
-					args.putParcelable(ITEM_ARG, new AppListItem("com.ilariosanseverino.apploud AppLoud"));
+					args.putParcelable(ITEM_ARG,
+							new AppListItem("com.ilariosanseverino.apploud AppLoud"));
 					detFrag.setArguments(args);
 					fragmentManager.beginTransaction().replace(R.id.app_detail_container,
 							detFrag, DETAIL_FRAG_TAG).commit();
 				}
 			}
 
-			showFragment((AppListFragment)fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
+			showFragment(fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
 					dataModel.getAppList());
-//			if(listFrag == null){
-//				listFrag = new AppListFragment();
-//				Bundle arguments = new Bundle();
-//				arguments.putParcelableArrayList(LIST_ARG, dataModel.getAppList());
-//				listFrag.setArguments(arguments);
-//			}
-//			fragmentManager.beginTransaction().replace(R.id.app_list, listFrag, LIST_FRAG_TAG).commit();
-				
+			
 			unbindService(connection);
 			
 			if(progr.isShowing())
@@ -84,7 +81,7 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 		}
 	};
 	
-	private void showFragment(AppListFragment recycleFrag, ArrayList<AppListItem> content){
+	private void showFragment(Fragment recycleFrag, ArrayList<AppListItem> content){
 		FragmentManager fragmentManager = getFragmentManager();
 		if(recycleFrag == null){
 			recycleFrag = new AppListFragment();

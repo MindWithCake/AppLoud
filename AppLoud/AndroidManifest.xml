@@ -55,6 +55,12 @@
 		<activity
 			android:name="com.ilariosanseverino.apploud.ui.PlayPauseActivity"
 			android:theme="@style/LightNoTitleDialog" />
+		
+		<receiver android:name="InstallationReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+            </intent-filter>
+        </receiver>
 	</application>
 
 </manifest>

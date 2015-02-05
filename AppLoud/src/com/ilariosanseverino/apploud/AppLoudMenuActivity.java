@@ -19,6 +19,8 @@ import com.ilariosanseverino.apploud.ui.SettingsFragment;
 public abstract class AppLoudMenuActivity extends Activity {
 	protected IBackgroundServiceBinder binder;
 	private Intent playPauseIntent;
+	private MenuItem searchMenuItem;
+	private SearchView searchView;
 	
 	protected  final BackgroundConnection connection = new BackgroundConnection(){
 		public void doOnServiceConnected(){
@@ -56,10 +58,23 @@ public abstract class AppLoudMenuActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
 		
+		searchMenuItem = menu.findItem(R.id.action_search);
 		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-	    SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+	    searchView = (SearchView)searchMenuItem.getActionView();
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	    searchView.setIconifiedByDefault(false);
+	    
+//	    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                MenuItemCompat.collapseActionView(searchMenuItem);
+//                return false;
+//            }
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return true;
+//            }
+//        });
 	    
 		playPauseIntent = new Intent(this, PlayPauseActivity.class);
 		return super.onCreateOptionsMenu(menu);
