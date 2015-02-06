@@ -1,6 +1,8 @@
 package com.ilariosanseverino.apploud;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import com.ilariosanseverino.apploud.ui.AppListItem;
 import com.ilariosanseverino.apploud.ui.widgets.IgnorableTuning;
 
 import static com.ilariosanseverino.apploud.data.TuningControl.*;
+import static android.media.AudioManager.*;
 
 public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarChangeListener, OnCheckedChangeListener {
 	private Intent serviceIntent;
@@ -25,14 +28,20 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 	private AppDetailActivator activator;
 	
 	private void initTuner(IgnorableTuning t, TuningParameter p){
+		AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		View v = t.findViewById(p.ctrl.customViewId);
 		switch(p.ctrl){
-		case RINGER: case NOTY: case MUSIC: case SYS:
-			int prog = 0;
-			if(p.getValue() != null)
-				prog = Integer.parseInt(p.getValue());
-			((SeekBar)v).setProgress(prog);
-			((SeekBar)v).setOnSeekBarChangeListener(this);
+		case RINGER:
+			initAudioControl((SeekBar)v, p.getValue(), am.getStreamMaxVolume(STREAM_RING));
+			break;
+		case NOTY:
+			initAudioControl((SeekBar)v, p.getValue(), am.getStreamMaxVolume(STREAM_NOTIFICATION));
+			break;
+		case MUSIC:
+			initAudioControl((SeekBar)v, p.getValue(), am.getStreamMaxVolume(STREAM_MUSIC));
+			break;
+		 case SYS:
+			initAudioControl((SeekBar)v, p.getValue(), am.getStreamMaxVolume(STREAM_SYSTEM));
 			break;
 		case ROTO: case GPS:
 			((ToggleButton)v).setChecked("ON".equals(p.getValue()));
@@ -41,6 +50,15 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		default:
 			throw new IllegalArgumentException("Tuning sconosciuto: "+p.ctrl.column);
 		}
+	}
+	
+	private void initAudioControl(SeekBar b, String progress, int max){
+		int prog = 0;
+		if(progress != null)
+			prog = Integer.parseInt(progress);
+		b.setMax(max);
+		b.setProgress(prog);
+		b.setOnSeekBarChangeListener(this);
 	}
 	
 	@Override
