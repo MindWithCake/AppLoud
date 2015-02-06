@@ -1,6 +1,7 @@
 package com.ilariosanseverino.apploud;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
@@ -42,21 +44,22 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	public final static String ITEM_ARG = "appItem";
 	public final static String LIST_ARG = "apps";
 	private String searchString = null;
-	
+	public static final String DISPLAY_INDEX = "com.ilariosanseverino.apploud.AppListActivity index";
+
 	private final BroadcastReceiver dbReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			dataModel = new AppListDataModel(binder);
 			if(searchString != null)
-				dataModel.getFilteredAppList(AppListActivity.this, searchString);
-			
+				dataModel.filterData(AppListActivity.this, searchString);
+
 			FragmentManager fragmentManager = getFragmentManager();
 			setContentView(R.layout.activity_app_list);
 
 			if(findViewById(R.id.app_detail_container) != null){
 				mTwoPane = true;
 				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).
-						setActivateOnItemClick(true);
+				setActivateOnItemClick(true);
 
 				AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.
 						findFragmentByTag(DETAIL_FRAG_TAG);
@@ -73,14 +76,19 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 
 			showFragment(fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
 					dataModel.getAppList());
-			
+
+			Intent indexIntent = new Intent(DISPLAY_INDEX);
+			LocalBroadcastManager.getInstance(AppListActivity.this).
+			sendBroadcast(indexIntent);
+			Log.i("ListAct", "Broadcast mandato");
+
 			unbindService(connection);
-			
+
 			if(progr.isShowing())
 				progr.dismiss();
 		}
 	};
-	
+
 	private void showFragment(Fragment recycleFrag, ArrayList<AppListItem> content){
 		FragmentManager fragmentManager = getFragmentManager();
 		if(recycleFrag == null){
@@ -91,43 +99,43 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 		}
 		fragmentManager.beginTransaction().replace(R.id.app_list, recycleFrag, LIST_FRAG_TAG).commit();
 	}
-	
+
 	public void showFilteredResult(ArrayList<AppListItem> items){
 		showFragment(null, items);
 		searchString = null;
 	}
-	
+
 	@Override
 	protected void doOnServiceConnected(){}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
 			searchString = intent.getStringExtra(SearchManager.QUERY);
-		 
+
 		intent = new Intent(this, BackgroundService.class);
-		
+
 		if(savedInstanceState == null){
-		LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
-				new IntentFilter(FillerThread.DB_FILLED_EVENT));
-		startService(intent);
-		progr = ProgressDialog.show(this,
-				getResources().getString(R.string.progress_load_title),
-				getResources().getString(R.string.progress_load_summ));
+			LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
+					new IntentFilter(FillerThread.DB_FILLED_EVENT));
+			startService(intent);
+			progr = ProgressDialog.show(this,
+					getResources().getString(R.string.progress_load_title),
+					getResources().getString(R.string.progress_load_summ));
 		}
-		
+
 		bindService(intent, connection, BIND_ABOVE_CLIENT);
 	}
-	
+
 	@Override
 	public void onPause(){
 		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(dbReceiver);
 	}
-	
+
 	/**
 	 * Callback method from {@link AppListFragment.Callbacks} indicating that
 	 * the item with the given ID was selected.
@@ -153,5 +161,12 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	@Override
 	protected int getContainerID(){
 		return R.id.app_list;
+	}
+
+	@Override
+	public Map<String, Integer> getIndexMap(){
+		if(dataModel != null)
+			return dataModel.getMapIndex();
+		return null;
 	}
 }

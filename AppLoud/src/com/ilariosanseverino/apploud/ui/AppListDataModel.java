@@ -1,15 +1,19 @@
 package com.ilariosanseverino.apploud.ui;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
-import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 import com.ilariosanseverino.apploud.AppListActivity;
+import com.ilariosanseverino.apploud.service.IBackgroundServiceBinder;
 
 public class AppListDataModel {
 	private ArrayList<AppListItem> appList;
+	private Map<String, Integer> mapIndex;
 
 	public AppListDataModel(IBackgroundServiceBinder binder){
+		mapIndex = new LinkedHashMap<String, Integer>();
 		refreshAppList(binder);
 	}
 
@@ -19,9 +23,14 @@ public class AppListDataModel {
 
 	public void refreshAppList(IBackgroundServiceBinder binder){
 		appList = binder != null? binder.getAppList() : new ArrayList<AppListItem>();
+		for (AppListItem item: appList) {
+            String index = item.appName().substring(0, 1).toUpperCase(Locale.getDefault());
+            if (mapIndex.get(index) == null)
+                mapIndex.put(index, appList.indexOf(item));
+        }
 	}
 
-	public void getFilteredAppList(AppListActivity caller, String regex){
+	public void filterData(AppListActivity caller, String regex){
 		new FilterThread(caller, regex).start();
 	}
 
@@ -71,5 +80,9 @@ public class AppListDataModel {
 				displayActivity.showFilteredResult(arg);
 			}
 		}
+	}
+
+	public Map<String, Integer> getMapIndex(){
+		return mapIndex;
 	}
 }

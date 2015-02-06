@@ -1,12 +1,26 @@
 package com.ilariosanseverino.apploud;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.ListFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ilariosanseverino.apploud.ui.AppListAdapter;
 import com.ilariosanseverino.apploud.ui.AppListItem;
@@ -21,8 +35,10 @@ import com.ilariosanseverino.apploud.ui.AppListItem;
  * interface.
  */
 public class AppListFragment extends ListFragment {
-	
+	private final static int LIST_SCROLL_TRESHOLD = 50;
 	private ArrayList<AppListItem> appList = new ArrayList<AppListItem>();
+	private int height;
+	private Map<String, Integer> indexMap = null; //TODO 
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -44,15 +60,20 @@ public class AppListFragment extends ListFragment {
 	public interface Callbacks {
 		/** Callback for when an item has been selected. */
 		public void onItemSelected(long id);
+		public Map<String, Integer> getIndexMap();
 	}
 
 	/**
 	 * A dummy implementation of the {@link Callbacks} interface that does
 	 * nothing. Used only when this fragment is not attached to an activity. */
 	private static Callbacks sDummyCallbacks = new Callbacks(){
-		@Override
-		public void onItemSelected(long id){}
+		@Override public void onItemSelected(long id){}
+		@Override public Map<String, Integer> getIndexMap(){
+			return null;
+		}
 	};
+	
+	private final BroadcastReceiver indexReceiver = new IndexReceiver();
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,37 +84,72 @@ public class AppListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+
 		savedInstanceState = getArguments();
 		if (savedInstanceState != null && savedInstanceState.containsKey(AppListActivity.LIST_ARG))
 			appList = savedInstanceState.getParcelableArrayList(AppListActivity.LIST_ARG);          
-		
+
 		setListAdapter(new AppListAdapter(getActivity(), appList));
+		
+		Log.i("ListFrag", "Receiver registrato");
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState){
+		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		height = displaymetrics.heightPixels;
+		height -= getActivity().getActionBar().getHeight();
+		height -= getResources().getDimensionPixelSize(
+				getResources().getIdentifier("status_bar_height", "dimen", "android"));
+		if(indexMap != null)
+			drawIndex(rootView);
+		return rootView;
+	}
+	
+	private void drawIndex(View rootView){
+		LinearLayout indexLayout = (LinearLayout)rootView.findViewById(R.id.side_index);
+		List<String> indexList = new ArrayList<String>(indexMap.keySet());
+		int elemH = (height - indexList.size()) / indexList.size();
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+
+		TextView textView;
+		for(String index: indexList) {
+			textView = (TextView)inflater.inflate(R.layout.side_index_item, null);
+			textView.setText(index);
+			textView.setClickable(true);
+			textView.setOnClickListener(new IndexClickListener());
+			textView.setHeight(elemH);
+			indexLayout.addView(textView);
+		}
 	}
 
 	@Override
-	public void onAttach(Activity activity){
-		super.onAttach(activity);
+	public void onAttach(Activity act){
+		super.onAttach(act);
+		if(!(act instanceof Callbacks))
+			throw new IllegalStateException("Activity must implement fragment's callbacks.");
 		
-		if(!(activity instanceof Callbacks))
-			throw new IllegalStateException(
-					"Activity must implement fragment's callbacks.");
-		mCallbacks = (Callbacks) activity;
+		mCallbacks = (Callbacks)act;
+		indexMap = mCallbacks.getIndexMap();
+		if(indexMap == null){
+			LocalBroadcastManager.getInstance(getActivity()).registerReceiver(indexReceiver,
+					new IntentFilter(AppListActivity.DISPLAY_INDEX));
+		}
 	}
 
 	@Override
 	public void onDetach(){
 		super.onDetach();
 		mCallbacks = sDummyCallbacks;
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(indexReceiver);
 	}
 
 	@Override
-	public void onListItemClick(ListView listView, View view, int position,
-			long id){
+	public void onListItemClick(ListView listView, View view, int position, long id){
 		super.onListItemClick(listView, view, position, id);
-
-		// Notify the active callbacks interface (the activity, if the
-		// fragment is attached to one) that an item has been selected.
 		mCallbacks.onItemSelected(id);
 	}
 
@@ -113,5 +169,28 @@ public class AppListFragment extends ListFragment {
 		// give items the 'activated' state when touched.
 		getListView().setChoiceMode(activateOnItemClick?
 				ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+	}
+
+	private class IndexClickListener implements OnClickListener{
+		public void onClick(View v){
+			TextView selectedIndex = (TextView)v;
+			int index = mCallbacks.getIndexMap().get(selectedIndex.getText());
+			ListView lv = getListView();
+			
+			int currentIndex = lv.getFirstVisiblePosition();
+			if(index - currentIndex < -LIST_SCROLL_TRESHOLD) //scroll up
+				getListView().setSelection(index + LIST_SCROLL_TRESHOLD);
+			else if(index - currentIndex > LIST_SCROLL_TRESHOLD)
+				getListView().setSelection(index - LIST_SCROLL_TRESHOLD);
+			
+			getListView().smoothScrollToPositionFromTop(index, 10, 500);
+		}
+	}
+	
+	private class IndexReceiver extends BroadcastReceiver{
+		public void onReceive(Context context, Intent intent){
+			Log.i("ListFrag", "Broadcast ricevuto");
+			drawIndex(getView());
+		}
 	}
 }

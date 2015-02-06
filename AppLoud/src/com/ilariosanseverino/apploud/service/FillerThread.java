@@ -16,7 +16,7 @@ public class FillerThread extends Thread {
 	private PackageManager pm;
 	private SQLiteDatabase db;
 	private Context ctx;
-	public final static String DB_FILLED_EVENT = "fillerthread-db-full";
+	public final static String DB_FILLED_EVENT = "com.ilariosanseverino.apploud.service.FillerThread db-full";
 	
 	public FillerThread(Context ctx, AppSQLiteHelper helper, 
 			SQLiteDatabase db){
