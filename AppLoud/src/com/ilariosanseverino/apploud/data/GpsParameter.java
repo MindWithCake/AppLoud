@@ -16,7 +16,7 @@ public class GpsParameter extends TuningParameter {
 	}
 
 	@Override
-	protected String getActualValue(Context ctx){
+	protected String getCurrentValue(Context ctx){
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -26,5 +26,4 @@ public class GpsParameter extends TuningParameter {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

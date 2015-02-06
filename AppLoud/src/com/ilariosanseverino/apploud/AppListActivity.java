@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
@@ -80,7 +79,6 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 			Intent indexIntent = new Intent(DISPLAY_INDEX);
 			LocalBroadcastManager.getInstance(AppListActivity.this).
 			sendBroadcast(indexIntent);
-			Log.i("ListAct", "Broadcast mandato");
 
 			unbindService(connection);
 

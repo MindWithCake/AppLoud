@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.db.AppSQLiteHelper;
 
@@ -56,7 +55,6 @@ public class BackgroundService extends AppLoudPreferenceListenerService {
 	
 	@Override
 	protected void changeThreadStatus(){
-		Log.i("Service", "change status: should run = "+threadShouldRun);
 		if(!threadShouldRun)
 			thread.interrupt();
 		else if(!threadRunning)

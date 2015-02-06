@@ -1,21 +1,13 @@
 package com.ilariosanseverino.apploud.data;
 
-import static android.media.AudioManager.STREAM_MUSIC;
-import static android.media.AudioManager.STREAM_NOTIFICATION;
-import static android.media.AudioManager.STREAM_RING;
-import static android.media.AudioManager.STREAM_SYSTEM;
-import static com.ilariosanseverino.apploud.data.TuningControl.MUSIC;
-import static com.ilariosanseverino.apploud.data.TuningControl.NOTY;
-import static com.ilariosanseverino.apploud.data.TuningControl.RINGER;
-import static com.ilariosanseverino.apploud.data.TuningControl.SYS;
-import static com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry.COLUMN_NAME_MUSIC_STREAM;
-import static com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry.COLUMN_NAME_NOTIFICATION_STREAM;
-import static com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry.COLUMN_NAME_RING_STREAM;
-import static com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry.COLUMN_NAME_SYSTEM_STREAM;
+import static android.media.AudioManager.*;
+import static com.ilariosanseverino.apploud.data.TuningControl.*;
+import static com.ilariosanseverino.apploud.db.AppVolumeContract.AppEntry.*;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.VolumeFeedback;
 
@@ -31,17 +23,18 @@ public class AudioTuning extends TuningParameter {
 	@Override
 	protected boolean doApplyTuning(Context ctx, String val){
 		AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
-		
+		Log.w("Audio-"+ctrl.column, "mi appresto ad applicare il settaggio "+val);
 		if(am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL || !isEnabled(val))
 			return false;
 		
 		int intValue = Integer.parseInt(val);
+		Log.w("Audio-"+ctrl.column, "Il settaggio deve essere applicato: "+intValue);
 		am.setStreamVolume(stream, intValue, flags(ctx));
 		return true;
 	}
 
 	@Override
-	protected String getActualValue(Context ctx){
+	protected String getCurrentValue(Context ctx){
 		AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
 		int vol = am.getStreamVolume(stream);
 		return Integer.toString(vol);

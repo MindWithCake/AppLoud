@@ -13,7 +13,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,8 +89,6 @@ public class AppListFragment extends ListFragment {
 			appList = savedInstanceState.getParcelableArrayList(AppListActivity.LIST_ARG);          
 
 		setListAdapter(new AppListAdapter(getActivity(), appList));
-		
-		Log.i("ListFrag", "Receiver registrato");
 	}
 	
 	@Override
@@ -189,7 +186,6 @@ public class AppListFragment extends ListFragment {
 	
 	private class IndexReceiver extends BroadcastReceiver{
 		public void onReceive(Context context, Intent intent){
-			Log.i("ListFrag", "Broadcast ricevuto");
 			drawIndex(getView());
 		}
 	}

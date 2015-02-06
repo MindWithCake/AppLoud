@@ -3,7 +3,6 @@ package com.ilariosanseverino.apploud;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -62,7 +61,6 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		super.onCreate(savedInstanceState);
 		serviceIntent = new Intent(this, BackgroundService.class);
 		bindService(serviceIntent, connection, BIND_AUTO_CREATE);
-		Log.i("Details", "Chiamato bind service");
 		setContentView(R.layout.activity_app_detail);
 		
 		// Show the Up button in the action bar.
@@ -101,7 +99,6 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser){
-		Log.i("DetailAct", "Progress changed: "+progress+" "+fromUser);
 		if(binder == null || !fromUser)
 			return;
 		for(TuningControl ctrl: TuningControl.values()){
@@ -125,7 +122,7 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		if(buttonView.getId() == ROTO.customViewId)
 			binder.setParam(item, ROTO.column, isChecked? "ON" : "OFF");
 		else if(buttonView.getId() == GPS.customViewId)
-			Log.e("DetailAct", "Premuto bottone GPS!");
+			/*Log.e("DetailAct", "Premuto bottone GPS!")*/;
 		else
 			throw new IllegalArgumentException("Bottone misterioso checkato: "+buttonView.getId());
 	}

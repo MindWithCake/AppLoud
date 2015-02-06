@@ -13,21 +13,21 @@ public class BackgroundThread extends AppChangedDaemon {
 	}
 	
 	protected void doOnAppChanged(String app, String pack){
+		Log.i("Thread", "Applicazione cambiata: "+app);
 		TuningParameter[] params = owner.helper.getParameters(owner.db, app, pack);
 		for(TuningParameter param: params)
 			param.applyTuning(owner);
+		Log.i("Thread", "Ho finito di applicare i parametri di "+app);
 	}
 	
 	@Override
 	public void start(){
-		Log.i("BgThread", "Thread started");
 		owner.threadRunning = true;
 		super.start();
 	}
 	
 	@Override
 	public void interrupt(){
-		Log.i("BgThread", "Thread fermato");
 		owner.threadRunning = false;
 		super.interrupt();
 	}
