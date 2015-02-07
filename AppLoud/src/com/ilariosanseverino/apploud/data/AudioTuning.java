@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.VolumeFeedback;
 
@@ -23,12 +22,10 @@ public class AudioTuning extends TuningParameter {
 	@Override
 	protected boolean doApplyTuning(Context ctx, String val){
 		AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
-		Log.w("Audio-"+ctrl.column, "mi appresto ad applicare il settaggio "+val);
 		if(am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL || !isEnabled(val))
 			return false;
 		
 		int intValue = Integer.parseInt(val);
-		Log.w("Audio-"+ctrl.column, "Il settaggio deve essere applicato: "+intValue);
 		am.setStreamVolume(stream, intValue, flags(ctx));
 		return true;
 	}

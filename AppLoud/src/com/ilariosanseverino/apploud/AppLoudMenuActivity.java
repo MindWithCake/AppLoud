@@ -34,6 +34,11 @@ public abstract class AppLoudMenuActivity extends Activity {
 	protected abstract void doOnServiceConnected();
 	protected abstract int getContainerID();
 	
+	protected void bindBackgroundService(){
+		Intent intent = new Intent(this, BackgroundService.class);
+		bindService(intent, connection, BIND_ABOVE_CLIENT);
+	}
+	
 	@Override
 	  public boolean onOptionsItemSelected(MenuItem item){
 		switch (item.getItemId()){
@@ -63,18 +68,6 @@ public abstract class AppLoudMenuActivity extends Activity {
 	    searchView = (SearchView)searchMenuItem.getActionView();
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	    searchView.setIconifiedByDefault(false);
-	    
-//	    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                MenuItemCompat.collapseActionView(searchMenuItem);
-//                return false;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return true;
-//            }
-//        });
 	    
 		playPauseIntent = new Intent(this, PlayPauseActivity.class);
 		return super.onCreateOptionsMenu(menu);

@@ -1,22 +1,20 @@
 package com.ilariosanseverino.apploud;
 
+import static com.ilariosanseverino.apploud.AppListActivity.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.app.ListFragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,7 +70,7 @@ public class AppListFragment extends ListFragment {
 		}
 	};
 	
-	private final BroadcastReceiver indexReceiver = new IndexReceiver();
+//	private final BroadcastReceiver indexReceiver = new IndexReceiver();
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,11 +80,13 @@ public class AppListFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
+		Log.i("Fragment", "onCreate");
 		super.onCreate(savedInstanceState);
 
 		savedInstanceState = getArguments();
-		if (savedInstanceState != null && savedInstanceState.containsKey(AppListActivity.LIST_ARG))
-			appList = savedInstanceState.getParcelableArrayList(AppListActivity.LIST_ARG);          
+		if (savedInstanceState != null && savedInstanceState.containsKey(LIST_ARG)){
+			appList = savedInstanceState.getParcelableArrayList(LIST_ARG);
+		}
 
 		setListAdapter(new AppListAdapter(getActivity(), appList));
 	}
@@ -94,6 +94,7 @@ public class AppListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
+		Log.i("Fragment", "onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -101,8 +102,10 @@ public class AppListFragment extends ListFragment {
 		height -= getActivity().getActionBar().getHeight();
 		height -= getResources().getDimensionPixelSize(
 				getResources().getIdentifier("status_bar_height", "dimen", "android"));
+		
 		if(indexMap != null)
 			drawIndex(rootView);
+		
 		return rootView;
 	}
 	
@@ -125,23 +128,24 @@ public class AppListFragment extends ListFragment {
 
 	@Override
 	public void onAttach(Activity act){
+		Log.i("Fragment", "onAttach");
 		super.onAttach(act);
 		if(!(act instanceof Callbacks))
 			throw new IllegalStateException("Activity must implement fragment's callbacks.");
 		
 		mCallbacks = (Callbacks)act;
 		indexMap = mCallbacks.getIndexMap();
-		if(indexMap == null){
+		/*if(indexMap == null){
 			LocalBroadcastManager.getInstance(getActivity()).registerReceiver(indexReceiver,
 					new IntentFilter(AppListActivity.DISPLAY_INDEX));
-		}
+		}*/
 	}
 
 	@Override
 	public void onDetach(){
+		Log.i("Fragment", "onDetach");
 		super.onDetach();
 		mCallbacks = sDummyCallbacks;
-		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(indexReceiver);
 	}
 
 	@Override
@@ -152,9 +156,11 @@ public class AppListFragment extends ListFragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState){
+		Log.i("Fragment", "onSave");
 		super.onSaveInstanceState(outState);
 		if(mActivatedPosition != ListView.INVALID_POSITION)
 			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+		outState.putParcelableArrayList(LIST_ARG, appList);
 	}
 
 	/**
@@ -184,9 +190,11 @@ public class AppListFragment extends ListFragment {
 		}
 	}
 	
-	private class IndexReceiver extends BroadcastReceiver{
+	/*private class IndexReceiver extends BroadcastReceiver{
 		public void onReceive(Context context, Intent intent){
-			drawIndex(getView());
+			Log.i("ListFrag", "Broadcast di indice pronto ricevuto");
+			LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(indexReceiver);
+//			drawIndex(getView());
 		}
-	}
+	}*/
 }

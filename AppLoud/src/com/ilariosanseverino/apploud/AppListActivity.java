@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.ilariosanseverino.apploud.service.BackgroundService;
 import com.ilariosanseverino.apploud.service.FillerThread;
@@ -42,50 +43,62 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	public final static String LIST_FRAG_TAG = "List";
 	public final static String ITEM_ARG = "appItem";
 	public final static String LIST_ARG = "apps";
+//	public static final String DISPLAY_INDEX = "com.ilariosanseverino.apploud.AppListActivity index";
 	private String searchString = null;
-	public static final String DISPLAY_INDEX = "com.ilariosanseverino.apploud.AppListActivity index";
+	private ArrayList<AppListItem> filteredItems = null;
 
 	private final BroadcastReceiver dbReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			dataModel = new AppListDataModel(binder);
-			if(searchString != null)
-				dataModel.filterData(AppListActivity.this, searchString);
-
-			FragmentManager fragmentManager = getFragmentManager();
-			setContentView(R.layout.activity_app_list);
-
-			if(findViewById(R.id.app_detail_container) != null){
-				mTwoPane = true;
-				((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).
-				setActivateOnItemClick(true);
-
-				AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.
-						findFragmentByTag(DETAIL_FRAG_TAG);
-				if (detFrag == null) {
-					detFrag = new AppDetailFragment();
-					Bundle args = new Bundle();
-					args.putParcelable(ITEM_ARG,
-							new AppListItem("com.ilariosanseverino.apploud AppLoud"));
-					detFrag.setArguments(args);
-					fragmentManager.beginTransaction().replace(R.id.app_detail_container,
-							detFrag, DETAIL_FRAG_TAG).commit();
-				}
+			if(FillerThread.DB_FILLED_EVENT.equals(intent.getAction())){
+				Log.i("Activity", "onBroadcastReceive");
+				bindBackgroundService();
+				LocalBroadcastManager.getInstance(AppListActivity.this).unregisterReceiver(dbReceiver);
 			}
-
-			showFragment(fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
-					dataModel.getAppList());
-
-			Intent indexIntent = new Intent(DISPLAY_INDEX);
-			LocalBroadcastManager.getInstance(AppListActivity.this).
-			sendBroadcast(indexIntent);
-
-			unbindService(connection);
-
-			if(progr.isShowing())
-				progr.dismiss();
 		}
 	};
+
+	@Override
+	protected void doOnServiceConnected(){
+		Log.i("Activity", "onServiceConnected");
+		dataModel = new AppListDataModel(binder);
+		if(searchString != null)
+			dataModel.filterData(AppListActivity.this, searchString);
+		Log.w("Activity", "datamodel non è null");
+
+		FragmentManager fragmentManager = getFragmentManager();
+		setContentView(R.layout.activity_app_list);
+
+		if(findViewById(R.id.app_detail_container) != null){
+			mTwoPane = true;
+			((AppListFragment)fragmentManager.findFragmentById(R.id.app_list)).
+			setActivateOnItemClick(true);
+
+			AppDetailFragment detFrag = (AppDetailFragment)fragmentManager.
+					findFragmentByTag(DETAIL_FRAG_TAG);
+			if (detFrag == null) {
+				detFrag = new AppDetailFragment();
+				Bundle args = new Bundle();
+				args.putParcelable(ITEM_ARG,
+						new AppListItem("com.ilariosanseverino.apploud AppLoud"));
+				detFrag.setArguments(args);
+				fragmentManager.beginTransaction().replace(R.id.app_detail_container,
+						detFrag, DETAIL_FRAG_TAG).commit();
+			}
+		}
+
+		showFragment(fragmentManager.findFragmentByTag(LIST_FRAG_TAG),
+				dataModel.getAppList());
+
+		/*Intent indexIntent = new Intent(DISPLAY_INDEX);
+		LocalBroadcastManager.getInstance(AppListActivity.this).
+		sendBroadcast(indexIntent);*/
+
+		unbindService(connection);
+
+		if(progr.isShowing())
+			progr.dismiss();
+	}
 
 	private void showFragment(Fragment recycleFrag, ArrayList<AppListItem> content){
 		FragmentManager fragmentManager = getFragmentManager();
@@ -99,39 +112,52 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	}
 
 	public void showFilteredResult(ArrayList<AppListItem> items){
-		showFragment(null, items);
+		filteredItems = items;
+		showFragment(null, filteredItems);
 		searchString = null;
 	}
 
 	@Override
-	protected void doOnServiceConnected(){}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+		Log.i("Activity", "onCreate");
+		super.onCreate(/*savedInstanceState*/null);
 
 		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+		if(Intent.ACTION_SEARCH.equals(intent.getAction()))
 			searchString = intent.getStringExtra(SearchManager.QUERY);
 
-		intent = new Intent(this, BackgroundService.class);
-
 		if(savedInstanceState == null){
+			Log.i("Activity", "onCreate - ex novo");
 			LocalBroadcastManager.getInstance(this).registerReceiver(dbReceiver,
 					new IntentFilter(FillerThread.DB_FILLED_EVENT));
-			startService(intent);
-			progr = ProgressDialog.show(this,
-					getResources().getString(R.string.progress_load_title),
-					getResources().getString(R.string.progress_load_summ));
+			startService(new Intent(this, BackgroundService.class));
 		}
-
-		bindService(intent, connection, BIND_ABOVE_CLIENT);
+		else{
+			Log.i("Activity", "onCreate - riciclo");
+			bindBackgroundService();
+		}
+		
+		progr = ProgressDialog.show(this,
+				getResources().getString(R.string.progress_load_title),
+				getResources().getString(R.string.progress_load_summ));
 	}
 
 	@Override
 	public void onPause(){
+		Log.i("Activity", "onPause");
 		super.onPause();
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(dbReceiver);
+	}
+	
+	@Override
+	public void onResume(){
+		Log.i("Activity", "onResume");
+		super.onResume();
+	}
+	
+	@Override
+	public void onDestroy(){
+		Log.i("Activity", "onDestroy");
+		super.onDestroy();
 	}
 
 	/**
@@ -140,9 +166,12 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	 */
 	@Override
 	public void onItemSelected(long id){
+		AppListItem item = filteredItems != null?
+				filteredItems.get((int)id) : dataModel.getAppList().get((int)id);
+		
 		if(mTwoPane){
 			Bundle arguments = new Bundle();
-			arguments.putParcelable(ITEM_ARG, dataModel.getAppList().get((int)id));
+			arguments.putParcelable(ITEM_ARG, item);
 			AppDetailFragment fragment = new AppDetailFragment();
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction().replace(
@@ -150,7 +179,6 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 		}
 		else{
 			Intent detailIntent = new Intent(this, AppDetailActivity.class);
-			AppListItem item = dataModel.getAppList().get((int)id);
 			detailIntent.putExtra(ITEM_ARG, item);
 			startActivity(detailIntent);
 		}
@@ -165,6 +193,7 @@ public class AppListActivity extends AppLoudMenuActivity implements AppListFragm
 	public Map<String, Integer> getIndexMap(){
 		if(dataModel != null)
 			return dataModel.getMapIndex();
+		Log.w("Activity", "datamodel è null e lo ritorno al frammento");
 		return null;
 	}
 }

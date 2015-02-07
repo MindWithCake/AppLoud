@@ -1,7 +1,5 @@
 package com.ilariosanseverino.apploud.service;
 
-import android.util.Log;
-
 import com.ilariosanseverino.apploud.data.TuningParameter;
 
 public class BackgroundThread extends AppChangedDaemon {
@@ -13,11 +11,9 @@ public class BackgroundThread extends AppChangedDaemon {
 	}
 	
 	protected void doOnAppChanged(String app, String pack){
-		Log.i("Thread", "Applicazione cambiata: "+app);
 		TuningParameter[] params = owner.helper.getParameters(owner.db, app, pack);
 		for(TuningParameter param: params)
 			param.applyTuning(owner);
-		Log.i("Thread", "Ho finito di applicare i parametri di "+app);
 	}
 	
 	@Override
