@@ -46,6 +46,7 @@ public class AppDetailActivity extends AppLoudMenuActivity implements OnSeekBarC
 		case ROTO: case GPS:
 			((ToggleButton)v).setChecked("ON".equals(p.getValue()));
 			((ToggleButton)v).setOnCheckedChangeListener(this);
+			v.setEnabled(p.isParameterEnabled());
 			break;
 		default:
 			throw new IllegalArgumentException("Tuning sconosciuto: "+p.ctrl.column);

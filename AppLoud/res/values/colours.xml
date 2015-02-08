@@ -6,6 +6,8 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="light_gray">#55cccccc</color>
+    <color name="icon_up_alfa">#33cecece</color>
+    <color name="icon_down_alfa">#60dedede</color>
    <!--  <color name="sanse_enabled_background">#dd00ffff</color>
     <color name="sanse_disabled_background">#3300ffff</color> -->
     <color name="sanse_enabled_background">#1100ffff</color>

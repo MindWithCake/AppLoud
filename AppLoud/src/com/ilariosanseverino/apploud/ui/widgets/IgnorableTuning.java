@@ -1,8 +1,5 @@
 package com.ilariosanseverino.apploud.ui.widgets;
 
-import com.ilariosanseverino.apploud.R;
-import com.ilariosanseverino.apploud.R.styleable;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -11,13 +8,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class IgnorableTuning extends RelativeLayout implements OnLongClickListener, OnClickListener {
+import com.ilariosanseverino.apploud.R;
+import com.ilariosanseverino.apploud.R.styleable;
+
+public class IgnorableTuning extends RelativeLayout {
 	private int popupIcon = 0;
 	private String popupText;
 	private boolean enabled = false;
@@ -26,11 +24,15 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 	private ImageView checkView;
 	private ImageView popView;
 	private OnActivationChangedListener activationListener;
+	private IconClickListener iconListener;
+	private CheckClickListener checkListener;
 	
 	//--------------- Constructors -----------------------
 
 	public IgnorableTuning(Context context, AttributeSet attrs){
 		super(context, attrs);
+		checkListener = new CheckClickListener();
+		iconListener = new IconClickListener();
 		
 		TypedArray a = context.obtainStyledAttributes(attrs, styleable.IgnorableTuning, 0, 0);
 		try{
@@ -65,6 +67,8 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		super(context);
 		popView = new ImageView(context);
 		popView.setId(R.id.pop_icon);
+		popView.setOnClickListener(iconListener);
+//		popView.setOnLongClickListener(iconListener);
 		
 		popupText = popText;
 		
@@ -77,7 +81,7 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		checkView = new ImageView(context);
 		checkView.setId(R.id.check);
 		checkView.setImageResource(R.drawable.btn_check_buttonless_off);
-		checkView.setOnClickListener(this);
+		checkView.setOnClickListener(checkListener);
 		lp = new RelativeLayout.LayoutParams(generateDefaultLayoutParams());
 		lp.addRule(ALIGN_PARENT_LEFT);
 		addView(checkView, lp);
@@ -99,11 +103,13 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		popView = (ImageView)findViewById(R.id.pop_icon);
 		if(popupIcon != 0)
 			popView.setImageResource(popupIcon);
-		popView.setOnLongClickListener(this);
+		popView.setOnClickListener(iconListener);
+		popView.setBackgroundResource(R.drawable.popup_icon_selector);
+//		popView.setBackgroundResource(R.drawable.drawer_shadow);
 		
 		checkView = (ImageView)findViewById(R.id.check);
 		checkView.setImageResource(R.drawable.btn_check_buttonless_off);
-		checkView.setOnClickListener(this);
+		checkView.setOnClickListener(checkListener);
 		
 		changeBackground(enabled);
 	}
@@ -161,20 +167,30 @@ public class IgnorableTuning extends RelativeLayout implements OnLongClickListen
 		return lp;
 	}
 	
-	//------------- implemented interfaces ---------------
-
-	@Override
-	public boolean onLongClick(View v){
-		Toast t = Toast.makeText(getContext(), popupText, Toast.LENGTH_SHORT);
-		int[] coords = new int[2];
-		v.getLocationOnScreen(coords);
-		t.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, coords[1]-v.getHeight());
-		t.show();
-		return true;
+	//------------- Listeners ---------------
+	
+	private class IconClickListener implements OnClickListener, OnLongClickListener{
+		public void onClick(View v){
+			doClick(v);
+		}
+		
+		public boolean onLongClick(View v){
+			doClick(v);
+			return true;
+		}
+		
+		private void doClick(View v){
+			Toast t = Toast.makeText(getContext(), popupText, Toast.LENGTH_SHORT);
+			int[] coords = new int[2];
+			v.getLocationOnScreen(coords);
+			t.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, coords[1]-v.getHeight());
+			t.show();
+		}
 	}
-
-	@Override
-	public void onClick(View v){
-		setEnabled(!enabled);
+	
+	private class CheckClickListener implements OnClickListener{
+		public void onClick(View v){
+			setEnabled(!enabled);
+		}
 	}
 }
