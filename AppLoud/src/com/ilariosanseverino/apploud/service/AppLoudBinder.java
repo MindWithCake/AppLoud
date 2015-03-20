@@ -28,10 +28,6 @@ public class AppLoudBinder extends Binder implements IBackgroundServiceBinder {
 		return service.helper.toAppList(service.db);
 	}
 
-//	public void updateStream(AppListItem item, String streamName, int newValue){
-//		service.helper.updateVolume(service.db, item.appName(), item.appPkg(), streamName, newValue);
-//	}
-
 	public TuningParameter[] getAppValues(AppListItem item){
 		return service.helper.getParameters(service.db, item.appName(), item.appPkg());
 	}

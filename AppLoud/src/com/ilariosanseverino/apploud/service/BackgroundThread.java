@@ -12,6 +12,9 @@ public class BackgroundThread extends AppChangedDaemon {
 	
 	protected void doOnAppChanged(String app, String pack){
 		TuningParameter[] params = owner.helper.getParameters(owner.db, app, pack);
+		if(params == null) // applicazione sconosciuta
+			return;
+
 		for(TuningParameter param: params)
 			param.applyTuning(owner);
 	}

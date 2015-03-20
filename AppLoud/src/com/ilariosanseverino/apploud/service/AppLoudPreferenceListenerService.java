@@ -6,7 +6,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
 public abstract class AppLoudPreferenceListenerService extends Service implements OnSharedPreferenceChangeListener {
-	protected boolean threadShouldRun;
+	protected boolean threadShouldRun = true;
 	protected int flags;
 	
 	@Override
